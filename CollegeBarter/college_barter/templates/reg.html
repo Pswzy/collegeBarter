@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>用户注册</title>
+<link href="../media/css/main.css" rel="stylesheet" style="text/css" />
+<script src="../media/jslib/jquery.js" type="text/javascript"></script>
+<script type="text/javascript">
+function register(){
+	var username = $('#username').val();
+	var pwd = $('#password').val();
+	var pwd1 = $('#password1').val();
+	var sno = $('#sno').val();
+	var school = $('#school').val();
+	var phone = $('#phone').val();
+	var qq = $('#qq_number').val();
+	var username = $('#username').val();
+	if(!username)
+		{
+			alert('用户名不能为空');
+			return;
+		}
+	if(!pwd)
+		{
+			alert('密码不能为空');
+			return;
+		} 
+	if(!pwd1)
+		{
+			alert('确认密码不能为空');
+			return;
+		} 
+	if(!sno)
+		{
+			alert('学号不能为空');
+			return;
+		} 
+	if(school==0)
+		{
+			alert('请选择所在院校');
+			return;
+		} 
+	if(!phone)
+		{
+			alert('电话不能为空');
+			return;
+		}
+	if(!qq)
+		{
+			alert('QQ不能为空');
+			return;
+		}
+	if(pwd!=pwd1)
+		{
+			alert('两次输入的密码不一致，请重新输入');
+			return;
+		}
+	var data = {"type":"user-register","userName":username,"password":pwd,"sno":sno,"school":school,"mobile":phone,"qq":qq}
+	var post_data = {"data":JSON.stringify(data)};
+	$.post("/request/",post_data,function(reg){
+        reg = JSON.parse(reg.replace(/<script.*<\/script>/,''));
+			 if(reg.ret!='1101'){
+				alert(reg.info);
+				return;	
+			 }
+			 location.href="/login";
+		})
+};
+</script>
+</head>
+
+<body>
+<div id="page">
+<div id="top">
+	<div id="title">
+    <h1 align="center">高校网上跳蚤市场</h1>
+	</div>
+</div>
+<div id=main align="center">
+	<table name=tableReg align="center" style="margin-top:100px">
+    <tr>
+    	<td>用户名:</td>
+        <td><input id="username" type="text"/></td>
+     </tr>
+     <tr>
+     	<td>密码:</td>
+        <td><input id="password" type="password"/></td>
+     </tr>
+     <tr>
+     	<td>再次确认:</td>
+        <td><input id="password1" type="password"/></td><!--检验密码一致性-->
+     </tr>
+      <tr>
+     	<td>学号:</td>
+        <td><input id="sno" type="text"/></td>
+     </tr>
+      <tr>
+     	<td>所在院校:</td>
+        <td>
+            <!--<input id="school" type="text"/>-->
+            <select id="school">
+                <option value ="0">请选择学校</option>
+                <option value ="矿大">中国矿业大学(北京）</option>
+                <option value ="blu">北京语言大学</option>
+                <option value="bfu">北京林业大学</option>
+                <option value="cau">中国农业大学</option>
+            </select>
+        </td>
+     </tr>
+      <tr>
+     	<td>联系方式:</td>
+        <td>
+            <input id="phone" type="text"/>
+        </td>
+     </tr>
+      <tr>
+     	<td>QQ:</td>
+        <td><input id="qq_number" type="text"/></td>
+     </tr>
+     <tr>
+     	<td><input value="返回" type="button" onClick= "location.href='/login'"/></td>
+        <td><input value="完成" type="submit" onClick="register()"/></td>
+     </tr>
+     </table>
+</div>
+</div>
+</body>
+</html>
