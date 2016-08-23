@@ -157,26 +157,34 @@ DEFAULT_FILE_STORAGE = 'sae.ext.django.storage.backend.Storage'
 STORAGE_BUCKET_NAME = 'files'
 
 
-if 'SERVER_SOFTWARE' in os.environ:
-    from sae.const import (
-        MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
-    )
-else:
-    # Make `python manage.py syncdb` works happy!
-    MYSQL_HOST = '127.0.0.1'
-    MYSQL_PORT = '3307'
-    MYSQL_USER = 'root'
-    MYSQL_PASS = 'root'
-    MYSQL_DB   = 'CollegeBarter'
+#if 'SERVER_SOFTWARE' in os.environ:
+#    from sae.const import (
+#        MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
+#    )
+#else:
+#    # Make `python manage.py syncdb` works happy!
+#    MYSQL_HOST = '127.0.0.1'
+#    MYSQL_PORT = '3307'
+#    MYSQL_USER = 'root'
+#    MYSQL_PASS = 'root'
+#    MYSQL_DB   = 'CollegeBarter'
 
 DATABASES = {
+#    'default': {
+#        'ENGINE':   'django.db.backends.mysql',
+#        'NAME':     MYSQL_DB,
+#        'USER':     MYSQL_USER,
+#        'PASSWORD': MYSQL_PASS,
+#        'HOST':     MYSQL_HOST,
+#        'PORT':     MYSQL_PORT,
+#    }
     'default': {
         'ENGINE':   'django.db.backends.mysql',
-        'NAME':     MYSQL_DB,
-        'USER':     MYSQL_USER,
-        'PASSWORD': MYSQL_PASS,
-        'HOST':     MYSQL_HOST,
-        'PORT':     MYSQL_PORT,
+        'NAME':     'CollegeBarter',
+        'USER':     'root',
+        'PASSWORD': 'root',
+        'HOST':     '127.0.0.1',
+        'PORT':     '3307',
     }
 }
 
