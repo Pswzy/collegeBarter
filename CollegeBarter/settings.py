@@ -93,7 +93,7 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'CollegeBarter.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
-WSGI_APPLICATION = 'collegeBarter.wsgi.application'
+WSGI_APPLICATION = 'CollegeBarter.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -184,7 +184,7 @@ DATABASES = {
         'USER':     'root',
         'PASSWORD': 'root',
         'HOST':     '127.0.0.1',
-        'PORT':     '3307',
+        'PORT':     '3306',
     }
 }
 
