@@ -20,7 +20,7 @@ angular.module('starter.directives', [])
         },
         restrict: 'AE',
         replace: 'true',
-        templateUrl: '../../templates/head-nav.html',
+        templateUrl: 'dirtemplate/head-nav.html',
         //template:"<div>hello angular</div>",
         link: function(scope, el, attrs) {
 
