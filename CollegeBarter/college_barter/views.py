@@ -708,7 +708,7 @@ def index(request):
     return render_to_response("index.html",{"username":username})
 
 def login(request):
-    return render_to_response("admin.html")
+    return render_to_response("login.html")
 
 
 def rele(request):
@@ -730,6 +730,9 @@ def collect(request):
     username = request.session['username']
     return render_to_response("collect.html",{"username":username})
 
+def head(request):
+    username = request.session['username']
+    return render_to_response("head.html",{"username":username})
 
-
-
+def loginhtml(request):
+    return render_to_response("login.html")

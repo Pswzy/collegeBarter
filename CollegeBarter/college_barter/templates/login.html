@@ -1,0 +1,25 @@
+<ui-view>
+    <div class="background">
+        <h1>高校网上跳蚤市场</h1>
+        <div class="container">
+            <div class="img-all">
+                <div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div>
+                <div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div>
+                <div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div><div class="img-list"><img src="../media/images/img1.jpg"/></div>
+                <div class="clear"></div>
+            </div>
+            <div class="login-container">
+                <div>
+                    <span>用户名:</span><input type="text" ng-model="user.username"/>{$user.username$}
+                </div>
+                <div>
+                    <span>密码:</span><input type="password" ng-model="user.pwd"/>
+                </div>
+                <div>
+                    <button ng-click="login()">登录</button>
+                    <button ui-sref="reg">注册</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ui-view>

@@ -13,17 +13,17 @@ angular.module('starter.directives', [])
     };
 })
 
-.directive('headNav', function() {
-    return {
-        scope: {
-            val: '='
-        },
-        restrict: 'AE',
-        replace: 'true',
-        templateUrl: 'dirtemplate/head-nav.html',
-        //template:"<div>hello angular</div>",
-        link: function(scope, el, attrs) {
-
-        }
-    };
-});
+//.directive('headNav', function() {
+//    return {
+//        scope: {
+//            val: '='
+//        },
+//        restrict: 'AE',
+//        replace: 'true',
+//        templateUrl: 'head.html',
+//        //template:"<div>hello angular</div>",
+//        link: function(scope, el, attrs) {
+//
+//        }
+//    };
+//});
