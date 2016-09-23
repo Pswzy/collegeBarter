@@ -1,0 +1,14 @@
+<ui-view>
+    <div class="container background-all">
+        <div class="col-md-4" ng-repeat="v in barter">
+            <div>
+                <img ng-src="v.image_one_sha1"/>
+                <h2>{$v.title$}</h2>
+                <img ng-src="v.headimg"/>
+                <span>{$v.creatorName$}</span>
+                <p>{$v.content$}</p>
+                <span>{$v.time$}</span>
+            </div>
+        </div>
+    </div>
+</ui-view>

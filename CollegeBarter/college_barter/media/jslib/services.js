@@ -14,10 +14,35 @@ angular.module('starter.services', [])
             //    }
             //},
 
-            login: function (data) {
+            postRequest: function (data) {
                 var req = {
                     method: 'POST',
                     url: '/request/',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                    data: data
+                };
+                return $http(req);
+            },
+            getBarter: function (data) {
+                var req = {
+                    method: 'POST',
+                    url: '/request/',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
+                    data: data
+                };
+                return $http(req);
+            },
+            getBarterByGroup: function (data) {
+                var req = {
+                    method: 'POST',
+                    url: '/request/',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+                    },
                     data: data
                 };
                 return $http(req);

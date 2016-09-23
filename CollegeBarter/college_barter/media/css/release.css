@@ -1,0 +1,33 @@
+@charset "utf-8";
+.barter-img-list {
+    float: left;
+    width: 200px;
+    height: 200px;
+}
+
+.barter-img {
+    float: left;
+    width: 200px;
+    height: 200px;
+}
+
+.upload-img {
+    width: 200px;
+    height: 200px;
+}
+
+li.button-file.barter-upload-button {
+    position: relative;
+}
+
+.desc-text {
+    min-height: 200px;
+}
+
+input.upload-img {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    opacity: 0;
+    z-index: 2;
+}

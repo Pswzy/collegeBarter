@@ -50,12 +50,12 @@ function rele(){
     var data = {"type":"create-barter","userName":userName,"title":title,"category":category,"description":description}
 	var post_data = {"data":JSON.stringify(data)};
 	$.post("/request/",post_data,function(release){
-        release = JSON.parse(release.replace(/<script.*<\/script>/,''));
-			 if(release.ret=='1104'){
-				alert(release.info);
+        rele = JSON.parse(rele.replace(/<script.*<\/script>/,''));
+			 if(rele.ret=='1104'){
+				alert(rele.info);
 				return;	
 			 }
-             var barter_sha1 = release.barterSha1;
+             var barter_sha1 = rele.barterSha1;
              uploader.setOption('multipart_params',{"userName":userName , 'barterSha1':barter_sha1});
              if(uploader.files.length > 0) {
                     uploader.start();//开始上传
@@ -121,7 +121,7 @@ $(document).ready(function(){
         <a id="pickfiles" href="javascript:;" style="color:#DC143C ">[选择图片]</a>
         <!--<a id="uploadfiles" href="javascript:;"style="color:#DC143C">[上传图片]</a>-->
     </div>
-	<input type='submit' value='提交' onClick="rele()" id="uploadButton"/>
+	<input type='submit' value='提交' onClick="release()" id="uploadButton"/>
     </div>
 </div>
 </div>

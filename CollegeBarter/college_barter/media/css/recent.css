@@ -1,0 +1,22 @@
+@charset "utf-8";
+.col-md-offset-1.col-md-10.cate-nav {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #ffffff;
+    height: 50px;
+    padding-top: 10px;
+}
+
+ul.col-md-10.cate-list a {
+    font-size: 18px;
+}
+
+.col-md-1.cate-title {
+    font-size: 18px;
+    padding-right: 0;
+    margin-top: 5px;
+}
+
+ul.col-md-10.cate-list.nav.nav-pills {
+    margin-top: -5px;
+}

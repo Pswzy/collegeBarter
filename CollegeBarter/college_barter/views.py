@@ -1,8 +1,9 @@
 ﻿#encoding=utf-8
 import sys
 reload(sys)
-sys.setdefaultencoding('utf8')
+sys.setdefaultencoding("utf8")
 import json,base64
+import pdb
 from django.shortcuts import render
 from django.http import HttpResponse
 from CollegeBarter.college_barter.models import *
@@ -40,24 +41,18 @@ def android_request(request):
                 rsdic={'ret':1105,'info':'User does not register'}
                 return
 
-            from os import environ
-            online = environ.get("APP_NAME", "")
-            if online:
-                sessionid=hashlib.sha1(username+str(time.time())).hexdigest()
-                session_obj=appSession(sessionid=sessionid,userName=username)
-                session_obj.save()
-            else:
+            sessionid=request.session.session_key
+            if sessionid==None:
+                request.session.save()
                 sessionid=request.session.session_key
-                if sessionid==None:
-                    request.session.save()
-                    sessionid=request.session.session_key
-                session_obj=appSession(sessionid=sessionid,userName=username)
-                session_obj.save()
+            session_obj=appSession(sessionid=sessionid,userName=username)
+            session_obj.save()
             request.session['username']=username
             request.session['sessionid']=sessionid
             request.session['heading']=user.avatar
             rsdic['sessionid']=sessionid
             rsdic['headimg']=user.avatar
+            rsdic['username']=username
             response=HttpResponse(json.dumps(rsdic))
             response.set_cookie('username',username,max_age=24*60*60)
         except Exception,e:
@@ -593,21 +588,10 @@ def check_login(request):
     rsdic={'ret':1101,'info':'ok'}
     if request.META.has_key('HTTP_SESSIONID'):
         sessionid=request.META['HTTP_SESSIONID']
-
-        from os import environ
-        online = environ.get("APP_NAME", "")
-
-        if online:
-            session_obj=appSession.objects.filter(sessionid=sessionid)
-            if len(session_obj)==0:
-                rsdic={'ret':1105,'info':'Session expired'}
-            request.session={}
-            request.session['username']=session_obj[0].userName
-        else:
-            session=Session.objects.filter(session_key=sessionid)
-            if len(session)==0:
-                rsdic={'ret':1105,'info':'Session expired'}
-            request.session['username']=session[0].get_decoded()['username']
+        session=Session.objects.filter(session_key=sessionid)
+        if len(session)==0:
+            rsdic={'ret':1105,'info':'Session expired'}
+        request.session['username']=session[0].get_decoded()['username']
     else:
 		if not request.is_ajax() and not request.session.has_key("username"):
 			rsdic={'ret':1104,'info':'No session id'}
@@ -637,50 +621,19 @@ def ajax_upload(request):
             sha=hashlib.sha1(image_name+str(time.time()))
             sha1=sha.hexdigest()
             image_name=sha1+'.'+image_format
+            #upload file
+            file=open(settings.UPLOAD_FILE_PATH+image_name,'wb')
+            file_content=''
+            for chunk in upload_image.chunks():
+                file_content+=chunk
+            file.write(file_content)
+            file.close()
 
-            from os import environ
-            online = environ.get("APP_NAME", "")
-
-            if online:
-                import sae.const
-                access_key = sae.const.ACCESS_KEY
-                secret_key = sae.const.SECRET_KEY
-                appname = sae.const.APP_NAME
-                domain_name = "uploadfile"  #刚申请的domain
-                resize_domain_name = 'resizefile'
-                import sae.storage
-                s = sae.storage.Client()
-                ob = sae.storage.Object(upload_image.read())
-                url = s.put(domain_name, image_name, ob)
-                #resize image
-                res=urllib2.urlopen(url)
-                image_str=res.read()
-                image=Image.open(StringIO.StringIO(image_str))
-                image.thumbnail((200,200),Image.ANTIALIAS)
-                output=StringIO.StringIO()
-                image.save(output,image.format)
-                co =  ContentFile(output.getvalue())
-                output.close()
-                if hasattr(co, '_get_file'):#admin入口
-                    resize_ob = sae.storage.Object(co._get_file().read())
-                else:  #view入口（ContentFile）
-                    resize_ob = sae.storage.Object(co.read())
-                url = s.put(resize_domain_name, image_name , resize_ob)
-
-            else:
-                #upload file
-                file=open(settings.UPLOAD_FILE_PATH+image_name,'wb')
-                file_content=''
-                for chunk in upload_image.chunks():
-                    file_content+=chunk
-                file.write(file_content)
-                file.close()
-
-                #resize image
-                file_name='resize_'+image_name
-                image=Image.open(settings.UPLOAD_FILE_PATH+image_name)
-                image.thumbnail((200,200),Image.ANTIALIAS)
-                image.save(settings.UPLOAD_RESIZE_FILE_PATH+file_name,image.format)
+            #resize image
+            file_name='resize_'+image_name
+            image=Image.open(settings.UPLOAD_FILE_PATH+image_name)
+            image.thumbnail((200,200),Image.ANTIALIAS)
+            image.save(settings.UPLOAD_RESIZE_FILE_PATH+file_name,image.format)
             if request.POST.has_key('barterSha1'):
                 #save file in database
                 image=BarterImage(barterSha1=barterSha1,imageName=image_name)
@@ -711,9 +664,9 @@ def login(request):
     return render_to_response("login.html")
 
 
-def rele(request):
+def release(request):
     username = request.session['username']
-    return render_to_response("rele.html",{"username":username})
+    return render_to_response("release.html",{"username":username})
 
 def reg(request):
     return render_to_response("reg.html")
@@ -722,13 +675,13 @@ def userInfo(request):
     username = request.session['username']
     return render_to_response("userInfo.html",{"username":username})
 
-def myrele(request):
+def myRelease(request):
     username = request.session['username']
-    return render_to_response("myrele.html",{"username":username})
+    return render_to_response("myRelease.html",{"username":username})
 
-def collect(request):
+def myCollect(request):
     username = request.session['username']
-    return render_to_response("collect.html",{"username":username})
+    return render_to_response("myCollect.html",{"username":username})
 
 def head(request):
     username = request.session['username']
@@ -736,3 +689,22 @@ def head(request):
 
 def loginhtml(request):
     return render_to_response("login.html")
+
+def recenthtml(request):
+    username = request.session['username']
+    return render_to_response("recent.html",{"username":username})
+
+def reghtml(request):
+    return render_to_response("reg.html")
+
+def myCollecthtml(request):
+    username = request.session['username']
+    return render_to_response("myCollect.html",{"username":username})
+
+def myReleasehtml(request):
+    username = request.session['username']
+    return render_to_response("myRelease.html",{"username":username})
+
+def releasehtml(request):
+    username = request.session['username']
+    return render_to_response("release.html",{"username":username})
