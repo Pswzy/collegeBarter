@@ -2,17 +2,6 @@
     <div class="container-fluid background-all">
         <div class="col-md-offset-1 col-md-10 cate-nav">
             <div class="col-md-1 cate-title"><span>分类：</span>
-                <!--<select id="cate" onChange="fenye(0)">-->
-                <!--&lt;!&ndash;this.options[this.options.selectedIndex].value&ndash;&gt;-->
-                <!--<option value="0">按类别查找</option>-->
-                <!--<option value="1">图书</option>-->
-                <!--<option value="2">服装</option>-->
-                <!--<option value="3">电子产品</option>-->
-                <!--<option value="4">体育用品</option>-->
-                <!--<option value="5">食品</option>-->
-                <!--<option value="6">户外用品</option>-->
-                <!--<option value="7">生活用品</option>-->
-            <!--</select>-->
             </div>
             <ul class="col-md-10 cate-list nav nav-pills" role="tablist">
                 <li role="presentation"><a>全部</a></li>
@@ -26,16 +15,16 @@
             </ul>
         </div>
         <div class="col-md-offset-1 col-md-10">
-        <div class="col-md-3" ng-repeat="v in barter">
-            <div>
-                <img ng-src="v.image_one_sha1"/>
+            <div class="col-md-3" ng-repeat="v in barter">
+                <img class="barter-img-show" ng-src="{$upload_image_url + v.image_one_sha1$}"/>
+
                 <h2>{$v.title$}</h2>
-                <img ng-src="v.headimg"/>
+                <img class="" ng-src="{$upload_image_url + v.headimg$}"/>
                 <span>{$v.creatorName$}</span>
+
                 <p>{$v.content$}</p>
                 <span>{$v.time$}</span>
             </div>
-        </div>
         </div>
     </div>
 </ui-view>

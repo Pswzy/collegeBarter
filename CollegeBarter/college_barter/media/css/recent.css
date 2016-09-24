@@ -20,3 +20,8 @@ ul.col-md-10.cate-list a {
 ul.col-md-10.cate-list.nav.nav-pills {
     margin-top: -5px;
 }
+
+.barter-img-show {
+    width: 100%;
+    height: 200px;
+}

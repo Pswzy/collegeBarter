@@ -73,15 +73,20 @@ angular.module('starter.controllers', [])
         }
     })
 
-    .controller('RecentCtrl', function ($scope, $state, apiServices) {
-        var username = "{%username%}";
+    .controller('RecentCtrl', function ($scope, $state, $cookies, apiServices) {
         //var name = "{{username}}";
-        console.log(username);
-        console.log(name);
+        if(!$cookies.get("username")){
+            $state.go('app.login');
+        } else {
+            $scope.username = $cookies.get("username");
+        }
+        console.log($scope.username);
         $scope.barter = [];
         $scope.start = 0;
         $scope.numOfLoadContent = 10;
         $scope.end = $scope.start + $scope.numOfLoadContent;
+        $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+        $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
 
         $scope.barter.loadContent = function () {
             var data = JSON.stringify({
@@ -220,7 +225,12 @@ angular.module('starter.controllers', [])
         //})
     })
 
-    .controller('MyReleaseCtrl', function ($scope, $state, apiServices) {
+    .controller('MyReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
+        if(!$cookies.get("username")){
+            $state.go('app.login');
+        } else {
+            $scope.username = $cookies.get("username");
+        }
         $scope.barter = [];
         $scope.start = 0;
         $scope.numOfLoadContent = 10;
@@ -247,7 +257,12 @@ angular.module('starter.controllers', [])
         $scope.barter.loadContent();
     })
 
-    .controller('MyCollectCtrl', function ($scope, $state, apiServices) {
+    .controller('MyCollectCtrl', function ($scope, $state, $cookies, apiServices) {
+        if(!$cookies.get("username")){
+            $state.go('app.login');
+        } else {
+            $scope.username = $cookies.get("username");
+        }
         $scope.barter = [];
         $scope.start = 0;
         $scope.numOfLoadContent = 10;
@@ -274,8 +289,12 @@ angular.module('starter.controllers', [])
         $scope.barter.loadContent();
     })
 
-    .controller('ReleaseCtrl', function ($scope, $state, apiServices) {
-        var userName="{{ username }}";
+    .controller('ReleaseCtrl', function ($scope, $state, $cookies, apiServices, flowFactoryProvider) {
+        if(!$cookies.get("username")){
+            $state.go('app.login');
+        } else {
+            $scope.username = $cookies.get("username");
+        }
         $scope.barter = {};
         $scope.categoryList = [
             {
@@ -306,7 +325,7 @@ angular.module('starter.controllers', [])
         $scope.release = function () {
             var data = JSON.stringify({
                 "type": "create-barter",
-                "userName":userName,
+                "userName":$scope.username,
                 "title":$scope.barter.title,
                 "category":$scope.barter.category,
                 "description":$scope.barter.description
@@ -319,6 +338,7 @@ angular.module('starter.controllers', [])
                     return;
                 } else {
                     $scope.barterSha1 = data.barterSha1;
+                    flowFactoryProvider.upload();
                 }
             });
         }

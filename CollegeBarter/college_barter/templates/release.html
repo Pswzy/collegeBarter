@@ -30,11 +30,12 @@
                 <label class="col-sm-2 control-label">照片</label>
                 <div class="col-sm-8">
                     <div class=""
-                         flow-init="{'target':'ajax_upload'}"
+                         flow-init="{'query':{'userName':username,'barterSha1':barterSha1}}"
                          flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
                          flow-files-submitted="$flow.upload()"
                          flow-file-success="fileSuccess($file, $message, $flow )"
                          flow-file-progress="fileProgress($file, $flow)"
+
                             >
                         <ul class="list-inline">
                             <li class="barter-img-list" ng-show="$flow.files.length" ng-repeat="file in $flow.files">
@@ -42,7 +43,7 @@
                                 <a class="delete"><i class="icon ion-android-cancel"
                                                      ng-click="$file.cancel($index)"></i></a>
                             </li>
-                            <li class="button-file barter-upload-button" ng-if="$flow.files.length<=4">
+                            <li class="button-file barter-upload-button" ng-if="$flow.files.length<4">
                                 <span><img src="../media/images/pic-add.png" class="barter-img"></span>
                                 <input type="file" class="upload-img" flow-btn/>
                             </li>

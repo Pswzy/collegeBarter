@@ -12,6 +12,7 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
 
     .config(['flowFactoryProvider', function (flowFactoryProvider) {
         flowFactoryProvider.defaults = {
+            target:'ajax_upload',
             permanentErrors: [404, 500, 501],
             singleFile:false,
             chunkSize:1*1024*1024,
