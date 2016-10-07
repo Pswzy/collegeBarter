@@ -1,72 +1,7 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>用户信息</title>
-<link href="../media/css/main.css" rel="stylesheet" style="text/css" />
-<script src="../media/jslib/jquery.js" type="text/javascript"></script>
-<script src="../media/jslib/logout.js" type="text/javascript"></script>
-<script type="text/javascript">
-   var username = "{{username}}";
-	$(document).ready(function(){
-		var user_name=username;
-		var data={"type":"get-user-info","user_name":user_name}
-		var post_data = {"data":JSON.stringify(data)};
-		$.post("/request/",post_data,function(userInfo){
-            userInfo = JSON.parse(userInfo.replace(/<script.*<\/script>/,''));
-			var user_info=userInfo.data;//userInfo还是userInfo.data
-			if(userInfo.ret!='1101'){
-				alert(userInfo.info);
-				return;	
-			 }
-			$("#headimg").attr("src",user_info.headimg);
-			$("#username").val(user_info.username);
-			$("#realname").val(user_info.realname);
-			$("#school").val(user_info.school);
-			$("#phone").val(user_info.mobile);
-			$("#qq").val(user_info.qq);
-		})
-		$("#log").val(username);
-})
-</script>
-</head>
-<body>
-<div id="page">
-<div id="top">
-	<div id="title">
-    <img id="logo" src="../media/images/logo.jpg" align="left" height="130">
-<!--    <h1 style="font-size:36px">高校网上跳蚤市场</h1>-->
-	<a style="font-size:36px" style="margin-top:20px" style="font-family:宋体">高校网上跳蚤市场</a>
-    </div><br />
-    <div id="toplink">
-       <a>欢迎你：<input id="log" type="button" style="font-size:16px;color:#0000FF"/></a>
-        <a href="/reg">注册</a>
-        <a href="#" onClick="logout()">退出</a>
+<ui-view>
+    <div class="container background-all">
+        <div class="col-md-10">
+           用戶信息
+        </div>
     </div>
-    <div id=catalog align="center">
-    <table border="2">
-    	<tr>
-    		<th> <a href="/index">最近发布</a></th>
-            <th><a href="/rele">发布物品</a></th>
-            <th> <a href="/myrele">我的发布</a></th>
-            <th><a href="/collect">我的收藏</a></th>
-            <th><a href="/userInfo">用户信息</a></th>
-        </tr>
-     </table>
-     </div>
-</div>
-<div id="main">
-    <div id="content">
-    <table style="color:#DC143C;font-family:宋体;font-size:24px;text-align:left;margin-top:100px;margin-left:250px">
-    <tr><th><img width=50px height=50px id="headimg"></th></tr>
-   	<tr><th>用户名：<input style="color:#808000;font-family:宋体;font-size:24px;text-align:left;"id="username" type="button"/></th></tr>
-    <tr><th>真实姓名：<input style="color:#808000;font-family:宋体;font-size:24px;text-align:left;"id="realname" type="button"/></th></tr>
-    <tr><th>学校：<input style="color:#808000;font-family:宋体;font-size:24px;text-align:left;margin-top:"id="school" type="button"/></th></tr>
-    <tr><th>联系电话：<input style="color:#808000;font-family:宋体;font-size:24px;text-align:left;"id="phone" type="button"/></th></tr>
-    <tr><th>QQ：<input style="color:#808000;font-family:宋体;font-size:24px;text-align:left;"id="qq" type="button"/></th></tr>
-    </table>
-    </div>
-</div>
-</div>
-</body>
-</html>
+</ui-view>

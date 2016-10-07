@@ -15,7 +15,7 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
             target:'ajax_upload',
             permanentErrors: [404, 500, 501],
             singleFile:false,
-            chunkSize:1*1024*1024,
+            chunkSize:1*1024*1024*1024,
             forceChunkSize:false,
             simultaneousUploads:3,
             fileParameterName:'file',
@@ -79,6 +79,15 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
                     'menuContent':{
                         templateUrl: 'myCollect.html',
                         controller: 'MyCollectCtrl'
+                    }
+                }
+            })
+            .state('app.barterDetail', {
+                url: '/barterDetail',
+                views:{
+                    'menuContent':{
+                        templateUrl: 'barterDetail.html',
+                        controller: 'BarterDetailCtrl'
                     }
                 }
             })
