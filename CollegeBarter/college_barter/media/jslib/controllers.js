@@ -1,51 +1,232 @@
 'use strict';
 angular.module('starter.controllers', [])
 
-    .controller('AppCtrl', function ($scope, $state) {
-        $scope.nav = {
-            nav1: "最近发布",
-            nav2: "发布物品",
-            nav3: "我的发布",
-            nav4: "我的收藏"
+.controller('AppCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    //$scope.resize_image_url = "/media/resize_image/resize_";
+    //$scope.upload_image_url = "/media/upload_image/";
+    $scope.head = {
+        user: "用户信息",
+        logout: "注销登录",
+        state: false
+    }
+    $scope.nav = {
+        nav1: "最近发布",
+        nav2: "发布物品",
+        nav3: "我的发布",
+        nav4: "我的收藏"
+    }
+    $scope.title = "高校网上跳蚤市场";
+    $scope.data = {
+        nav1: true,
+        nav2: false,
+        nav3: false,
+        nav4: false,
+    }
+    $scope.currentState = $state.current.name;
+    $scope.modal = {
+        title: "用户信息",
+        username: "用户名：",
+        realname: "真实姓名：",
+        school:"学校：",
+        qq:"QQ：",
+        phoneNum:"电话：",
+        userInfo: {}
+    };
+    $scope.activeNav = function() {
+        if($scope.currentState == 'app.recent') {
+            $scope.data.nav1 = true;
+            $scope.data.nav2 = false;
+            $scope.data.nav3 = false;
+            $scope.data.nav4 = false;
+        } else if($scope.currentState == 'app.release') {
+            $scope.data.nav1 = false;
+            $scope.data.nav2 = true;
+            $scope.data.nav3 = false;
+            $scope.data.nav4 = false;
+        }else if($scope.currentState == 'app.myRelease') {
+            $scope.data.nav1 = false;
+            $scope.data.nav2 = false;
+            $scope.data.nav3 = true;
+            $scope.data.nav4 = false;
+        }else if($scope.currentState == 'app.myCollect') {
+            $scope.data.nav1 = false;
+            $scope.data.nav2 = false;
+            $scope.data.nav3 = false;
+            $scope.data.nav4 = true;
+        }else {
+            //$scope.data.nav1 = true;
+            //$scope.data.nav2 = false;
+            //$scope.data.nav3 = false;
+            //$scope.data.nav4 = false;
         }
-        $scope.title = "高校网上跳蚤市场";
-        $scope.data = {
-            nav1: true,
-            nav2: false,
-            nav3: false,
-            nav4: false,
-        }
-    })
-    .controller('LoginCtrl', function ($scope, $state, apiServices, $cookies) {
-        $scope.user = {
-            username: "",
-            pwd: "",
-            pwdCheck: "",
-            sno: "",
-            school: "",
-            phone: "",
-            qqNum: ""
-        }
-
-        $scope.schoolList = [
-            {value: "中国矿业大学（北京）"},
-            {value: "中国农业大学"},
-            {value: "北京林业大学"}
-        ];
-        $scope.state = "login";
-
-        $scope.login = function () {
-            if (!$scope.user.username) {
-                alert("请输入用户名");
-                console.log($scope.user.username);
+    }
+    $scope.getUserHead = function() {
+        var data = JSON.stringify({
+            "type": "get-user-info",
+            "user_name": $scope.username
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
                 return;
+            } else {
+                $scope.userInfo = data.data;
             }
-            if (!$scope.user.pwd) {
-                alert("请输入密码");
-                console.log($scope.user.pwd);
+        });
+    }
+    $scope.toggleLink = function() {
+        $scope.head.state = !$scope.head.state;
+    }
+    $scope.getUserInfo = function() {
+        var data = JSON.stringify({
+            "type": "get-user-info",
+            "user_name": $scope.username
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
                 return;
+            } else {
+                $scope.modal.userInfo = data.data;
             }
-            var data = JSON.stringify({"type": "login", "username": $scope.user.username, "password": $scope.user.pwd});
+        });
+    }
+    $scope.logout = function() {
+        var data = JSON.stringify({
+            "type": "logout"
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            $cookies.remove("username");
+            $state.go('login');
+        });
+    }
+    $scope.getUserHead();
+    $scope.activeNav();
+})
+.controller('LoginCtrl', function ($scope, $state, apiServices, $cookies) {
+    $scope.user = {
+        username: "",
+        usernameError:"",
+        pwd: "",
+        pwdError: "",
+        pwdCheck: "",
+        sno: "",
+        school: "",
+        phone: "",
+        qqNum: ""
+    }
+
+    $scope.schoolList = [
+        {value: "中国矿业大学（北京）"},
+        {value: "中国农业大学"},
+        {value: "北京林业大学"}
+    ];
+    $scope.state = "login";
+
+    $scope.login = function () {
+        if (!$scope.user.username) {
+            $scope.user.usernameError = "请输入用户名";
+            return false;
+        }
+        if (!$scope.user.pwd) {
+            $scope.user.pwdError = "请输入密码";
+            return false;
+        }
+        var data = JSON.stringify({"type": "login", "username": $scope.user.username, "password": $scope.user.pwd});
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $cookies.put("username", data.username);
+                $state.go('app.recent')
+            }
+        });
+    };
+
+    $scope.goToReg = function () {
+        $scope.state = "reg"
+    }
+
+    $scope.backToLogin = function () {
+        $scope.state = "login"
+    }
+
+    $scope.reg = function () {
+
+    }
+})
+
+.controller('RecentCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.barter = [];
+    $scope.start = 0;
+    $scope.numOfLoadContent = 10;
+    $scope.end = $scope.start + $scope.numOfLoadContent;
+    $scope.category = 0;
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    //$scope.resize_image_url = "/media/resize_image/resize_";
+    //$scope.upload_image_url = "/media/upload_image/";
+    $scope.loadmore = {
+        zh:"加载更多",
+        state:false
+    }
+
+    $scope.barter.loadContent = function () {
+        var data = JSON.stringify({
+            "type": "recent-barters",
+            "recent-start": $scope.start,
+            "recent-end": $scope.end
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                if(data.data.length == $scope.numOfLoadContent) {
+                    $scope.loadmore.state = true;
+                } else {
+                    $scope.loadmore.state = false;
+                }
+                $scope.barter = $scope.barter.concat(data.data);
+                $scope.start = $scope.barter.length;
+            }
+        });
+    }
+    $scope.showdetail = function(barter) {
+        $cookies.put("barterSha1",barter.barterSha1);
+        $state.go('app.barterDetail');
+    }
+    $scope.toggleCollectBarter = function($event, barter) {
+        $event.stopPropagation();
+        if(barter.is_collected == 1) {
+            var data = JSON.stringify({
+                "type": "uncollect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
             var postdata = "data=" + data;
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
@@ -53,42 +234,49 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
-                    $cookies.put("username", data.username);
-                    console.log($cookies.getAll());
-                    $state.go('app.recent')
+                    barter.is_collected = 0;
                 }
             });
-        };
-
-        $scope.goToReg = function () {
-            $scope.state = "reg"
-        }
-
-        $scope.backToLogin = function () {
-            $scope.state = "login"
-        }
-
-        $scope.reg = function () {
-
-        }
-    })
-
-    .controller('RecentCtrl', function ($scope, $state, $cookies, apiServices) {
-        //var name = "{{username}}";
-        if(!$cookies.get("username")){
-            $state.go('app.login');
         } else {
-            $scope.username = $cookies.get("username");
+            var data = JSON.stringify({
+                "type": "collect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 1;
+                }
+            });
         }
-        console.log($scope.username);
-        $scope.barter = [];
-        $scope.start = 0;
-        $scope.numOfLoadContent = 10;
-        $scope.end = $scope.start + $scope.numOfLoadContent;
-        $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
-        $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    }
+    $scope.getUserInfo = function($event,barter) {
+        $event.stopPropagation();
+        var data = JSON.stringify({
+            "type": "get-user-info",
+            "user_name": barter.creatorName
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $scope.modal.userInfo = data.data;
+                $('#myModal').modal('show');
+            }
+        });
+    }
 
-        $scope.barter.loadContent = function () {
+    $scope.getBarterByCate = function(cate) {
+        if(cate == 0) {
+            $scope.category = cate;
             var data = JSON.stringify({
                 "type": "recent-barters",
                 "recent-start": $scope.start,
@@ -101,144 +289,20 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
-                    $scope.barter = data.data;
-                    console.log($scope.barter);
+                    if(data.data.length == $scope.numOfLoadContent) {
+                        $scope.loadmore.state = true;
+                    } else {
+                        $scope.loadmore.state = false;
+                    }
+                    $scope.barter = $scope.barter.concat(data.data);
+                    $scope.start = $scope.barter.length;
                 }
             });
-        }
-        $scope.barter.loadContent();
-        //var end;
-        //var len;
-        //var category;
-        //function fenye(val)
-        //{
-        //    /*$(".group").colorbox({rel:'group', transition:"fade"});*/
-        //    category=$("#cate  option:selected").val();
-        //    //category=$("select[id=cate]").val();
-        //    switch (val){
-        //        case 0://shouye
-        //            start=0;
-        //            end=10;
-        //            break;
-        //        case 1://prev
-        //            if(start!=0){
-        //                start-=10;
-        //                end-=10;
-        //            }else{
-        //                alert("已经是第一页了");
-        //                return;
-        //            }
-        //            break;
-        //        case 2:
-        //            if(len<10){
-        //                alert("已经是最后一页了");
-        //                return;
-        //            }
-        //            else{
-        //                start+=10;
-        //                end+=10;
-        //            }
-        //            break;
-        //    }
-        //    if(category!=0){
-        //        var data={"type":"get-barters-by-category","category":category,"recent-start":start,"recent-end":end};
-        //        var post_data = {"data":JSON.stringify(data)};
-        //        $("#content").empty();
-        //        $.post("/request/",post_data,function (data){
-        //            data = JSON.parse(data.replace(/<script.*<\/script>/,''));
-        //            if(data.ret!='1101'){
-        //                alert(data.info);
-        //                return;
-        //            }
-        //            var barter = data.data;
-        //            len=barter.length;
-        //            var html="";
-        //            var resize_image='http://collegebarter-resizefile.stor.sinaapp.com/';
-        //            var image_prefix = 'http://collegebarter-uploadfile.stor.sinaapp.com/';
-        //            $.each(barter,function(barterSha1,barter){
-        //                html = '';
-        //                html+='<div class="barter"><div id=head><div id=himg><img width=60px height=60px id="headimg" align="left" src='+image_prefix+barter.headimg+
-        //                    '></div><div id=htext colstatus='+barter.is_collected+' sha1='+barter.barterSha1+'><h1 style="color:#0000FF">'+barter.title+
-        //                    '<input id="collect" type="image" width=50px height=50px src="../media/images/collect.jpg" align="right"'+
-        //                    'onClick="collect(this)"/>'+
-        //                    '</h1><a style="font-size:16px">用户名:'+barter.creatorName+'&nbsp;&nbsp;&nbsp;&nbsp;发布时间:'+barter.time+
-        //                    '</a><br /></div></div><p style="font-size:16px;background-color:#AFEEEE;font-family:宋体">'+barter.content+'</p>'
-        //                if(barter.image_one_sha1){html+='<a class="group" href='+image_prefix+barter.image_one_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_one_sha1+'></a>'};
-        //                if(barter.image_two_sha1){html+='<a class="group" href='+image_prefix+barter.image_two_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_two_sha1+'></a>'};
-        //                if(barter.image_three_sha1){html+='<a class="group" href='+image_prefix+barter.image_three_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_three_sha1+'></a>'};
-        //                if(barter.image_four_sha1){html+='<a class="group" href='+image_prefix+barter.image_four_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_four_sha1+'></a>'};
-        //                html += "</div>"
-        //                $("#content").append(html);
-        //                $(".group").on("click",function(){
-        //                    $(this).colorbox({rel:'group', transition:'fade',width:"600px",height:"600px"});
-        //                });
-        //            })
-        //        });
-        //    }else{
-        //        var data={"type":"recent-barters","recent-start":start,"recent-end":end};
-        //        var post_data = {"data":JSON.stringify(data)};
-        //        $("#content").empty();
-        //        $.post("/request/",post_data,function (data){
-        //            data = JSON.parse(data.replace(/<script.*<\/script>/,''));
-        //            if(data.ret!='1101'){
-        //                alert(data.info);
-        //                return;
-        //            }
-        //            var barter = data.data;
-        //            len=barter.length;
-        //            var html="";
-        //            var resize_image='http://collegebarter-resizefile.stor.sinaapp.com/';
-        //            var image_prefix = 'http://collegebarter-uploadfile.stor.sinaapp.com/';
-        //            $.each(barter,function(barterSha1,barter){
-        //                html = '';
-        //                html+='<div class="barter"><div id=head><div id=himg><img width=60px height=60px id="headimg" align="left" src=http://collegebarter-uploadfile.stor.sinaapp.com/' +
-        //                    ''+barter.headimg+
-        //                    '></div><div id=htext colstatus='+barter.is_collected+' sha1='+barter.barterSha1+'><h1 style="color:#0000FF">'+barter.title+
-        //                    '<input id="collect" type="image" width=50px height=50px src="../media/images/collect.jpg" align="right"'+
-        //                    'onClick="collect(this)"/>'+
-        //                    '</h1><a style="font-size:16px">用户名:'+barter.creatorName+'&nbsp;&nbsp;&nbsp;&nbsp;发布时间:'+barter.time+
-        //                    '</a><br /></div></div><p style="font-size:16px;background-color:#AFEEEE;font-family:宋体">'+barter.content+'</p>'
-        //                if(barter.image_one_sha1){html+='<a class="group" href='+image_prefix+barter.image_one_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_one_sha1+'></a>'};
-        //                if(barter.image_two_sha1){html+='<a class="group" href='+image_prefix+barter.image_two_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_two_sha1+'></a>'};
-        //                if(barter.image_three_sha1){html+='<a class="group" href='+image_prefix+barter.image_three_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_three_sha1+'></a>'};
-        //                if(barter.image_four_sha1){html+='<a class="group" href='+image_prefix+barter.image_four_sha1+'><img width=200px height=200px src='+
-        //                    resize_image+barter.image_four_sha1+'></a>'};
-        //                html += "</div>"
-        //                $("#content").append(html);
-        //                $(".group").on("click",function(){
-        //                    $(this).colorbox({rel:'group', transition:'fade',width:"600px",height:"600px"});
-        //                });
-        //            })
-        //        });
-        //    }
-        //    $("#log").val(username);
-        //}
-        //$(document).ready(function(){
-        //    fenye(0);
-        //})
-    })
-
-    .controller('MyReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
-        if(!$cookies.get("username")){
-            $state.go('app.login');
         } else {
-            $scope.username = $cookies.get("username");
-        }
-        $scope.barter = [];
-        $scope.start = 0;
-        $scope.numOfLoadContent = 10;
-        $scope.end = $scope.start + $scope.numOfLoadContent;
-
-        $scope.barter.loadContent = function () {
+            $scope.category = cate;
             var data = JSON.stringify({
-                "type": "get-my-barters",
+                "type": "get-barters-by-category",
+                "category": cate,
                 "recent-start": $scope.start,
                 "recent-end": $scope.end
             });
@@ -249,28 +313,21 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
-                    $scope.barter = data.data;
-                    console.log($scope.barter);
+                    if(data.data.length == $scope.numOfLoadContent) {
+                        $scope.loadmore.state = true;
+                    } else {
+                        $scope.loadmore.state = false;
+                    }
+                    $scope.barter = $scope.barter.concat(data.data);
+                    $scope.start = $scope.barter.length;
                 }
             });
         }
-        $scope.barter.loadContent();
-    })
-
-    .controller('MyCollectCtrl', function ($scope, $state, $cookies, apiServices) {
-        if(!$cookies.get("username")){
-            $state.go('app.login');
-        } else {
-            $scope.username = $cookies.get("username");
-        }
-        $scope.barter = [];
-        $scope.start = 0;
-        $scope.numOfLoadContent = 10;
-        $scope.end = $scope.start + $scope.numOfLoadContent;
-
-        $scope.barter.loadContent = function () {
+    }
+    $scope.loadmoreBarter = function() {
+        if($scope.category == 0) {
             var data = JSON.stringify({
-                "type": "collected-barters",
+                "type": "recent-barters",
                 "recent-start": $scope.start,
                 "recent-end": $scope.end
             });
@@ -281,57 +338,344 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
-                    $scope.barter = data.data;
-                    console.log($scope.barter);
+                    if(data.data.length == $scope.numOfLoadContent) {
+                        $scope.loadmore.state = true;
+                    } else {
+                        $scope.loadmore.state = false;
+                    }
+                    $scope.barter = $scope.barter.concat(data.data);
+                    $scope.start = $scope.barter.length;
+                }
+            });
+        } else {
+            var data = JSON.stringify({
+                "type": "get-barters-by-category",
+                "category": $scope.category,
+                "recent-start": $scope.start,
+                "recent-end": $scope.end
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    if(data.data.length == $scope.numOfLoadContent) {
+                        $scope.loadmore.state = true;
+                    } else {
+                        $scope.loadmore.state = false;
+                    }
+                    $scope.barter = $scope.barter.concat(data.data);
+                    $scope.start = $scope.barter.length;
                 }
             });
         }
-        $scope.barter.loadContent();
-    })
+    }
+    $scope.barter.loadContent();
+})
 
+<<<<<<< HEAD
     .controller('ReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
         if(!$cookies.get("username")){
             $state.go('app.login');
-        } else {
-            $scope.username = $cookies.get("username");
-        }
-        $scope.barter = {};
-        $scope.categoryList = [
-            {
-                value:1,
-                name:"图书"
-            },
-            {
-                value:2,
-                name:"服装"
-            },
-            {
-                value:3,
-                name:"食品"
-            },
-            {
-                value:4,
-                name:"电子产品"
-            },
-            {
-                value:5,
-                name:"体育用品"
-            },
-            {
-                value:6,
-                name:"户外用品"
+=======
+.controller('MyReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.loadmore = {
+        zh:"加载更多",
+        state:false
+    }
+    $scope.barter = [];
+    $scope.start = 0;
+    $scope.numOfLoadContent = 10;
+    $scope.end = $scope.start + $scope.numOfLoadContent;
+    $scope.resize_image_url = "/media/resize_image/resize_";
+    $scope.upload_image_url = "/media/upload_image/";
+    $scope.voidContent = "没有发布的物品！"
+
+    $scope.barter.loadContent = function () {
+        var data = JSON.stringify({
+            "type": "get-my-barters",
+            "recent-start": $scope.start,
+            "recent-end": $scope.end
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                if(data.data.length == $scope.numOfLoadContent) {
+                    $scope.loadmore.state = true;
+                } else {
+                    $scope.loadmore.state = false;
+                }
+                $scope.barter = $scope.barter.concat(data.data);
+                $scope.start = $scope.barter.length;
             }
+        });
+    }
+    $scope.showdetail = function(barter) {
+        $cookies.put("barterSha1",barter.barterSha1);
+        $state.go('app.barterDetail');
+    }
+    $scope.toggleCollectBarter = function($event, barter) {
+        $event.stopPropagation();
+        if(barter.is_collected == 1) {
+            var data = JSON.stringify({
+                "type": "uncollect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 0;
+                }
+            });
+>>>>>>> c896fff63d645c181fa155977a77dbbbc7516f2c
+        } else {
+            var data = JSON.stringify({
+                "type": "collect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 1;
+                }
+            });
+        }
+    }
+    $scope.getUserInfo = function($event,barter) {
+        $event.stopPropagation();
+        var data = JSON.stringify({
+            "type": "get-user-info",
+            "user_name": barter.creatorName
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $scope.modal.userInfo = data.data;
+                $('#myModal').modal('show');
+            }
+        });
+    }
+    $scope.loadmoreBarter = function() {
+        var data = JSON.stringify({
+            "type": "recent-barters",
+            "recent-start": $scope.start,
+            "recent-end": $scope.end
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                if(data.data.length == $scope.numOfLoadContent) {
+                    $scope.loadmore.state = true;
+                } else {
+                    $scope.loadmore.state = false;
+                }
+                $scope.barter = $scope.barter.concat(data.data);
+                $scope.start = $scope.barter.length;
+            }
+        });
+    }
+    $scope.barter.loadContent();
+})
+
+.controller('MyCollectCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.loadmore = {
+        zh:"加载更多",
+        state:false
+    }
+    $scope.barter = [];
+    $scope.start = 0;
+    $scope.numOfLoadContent = 10;
+    $scope.end = $scope.start + $scope.numOfLoadContent;
+    $scope.resize_image_url = "/media/resize_image/resize_";
+    $scope.upload_image_url = "/media/upload_image/";
+    $scope.voidContent = "没有收藏的物品！"
+    $scope.barter.loadContent = function () {
+        var data = JSON.stringify({
+            "type": "collected-barters",
+            "recent-start": $scope.start,
+            "recent-end": $scope.end
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                if(data.data.length == $scope.numOfLoadContent) {
+                    $scope.loadmore.state = true;
+                } else {
+                    $scope.loadmore.state = false;
+                }
+                $scope.barter = $scope.barter.concat(data.data);
+                $scope.start = $scope.barter.length;
+            }
+        });
+    }
+    $scope.showdetail = function(barter) {
+        $cookies.put("barterSha1",barter.barterSha1);
+        $state.go('app.barterDetail');
+    }
+    $scope.toggleCollectBarter = function($event, barter) {
+        $event.stopPropagation();
+        if(barter.is_collected == 1) {
+            var data = JSON.stringify({
+                "type": "uncollect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 0;
+                }
+            });
+        } else {
+            var data = JSON.stringify({
+                "type": "collect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 1;
+                }
+            });
+        }
+    }
+    $scope.getUserInfo = function($event,barter) {
+        $event.stopPropagation();
+        var data = JSON.stringify({
+            "type": "get-user-info",
+            "user_name": barter.creatorName
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $scope.modal.userInfo = data.data;
+                $('#myModal').modal('show');
+            }
+        });
+    }
+    $scope.loadmoreBarter = function() {
+        var data = JSON.stringify({
+            "type": "recent-barters",
+            "recent-start": $scope.start,
+            "recent-end": $scope.end
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                if(data.data.length == $scope.numOfLoadContent) {
+                    $scope.loadmore.state = true;
+                } else {
+                    $scope.loadmore.state = false;
+                }
+                $scope.barter = $scope.barter.concat(data.data);
+                $scope.start = $scope.barter.length;
+            }
+        });
+    }
+    $scope.barter.loadContent();
+})
+
+.controller('BarterDetailCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.resize_image_url = "/media/resize_image/resize_";
+    $scope.upload_image_url = "/media/upload_image/";
+    $scope.barter = {};
+    $scope.barterSha1 = $cookies.get("barterSha1");
+    $scope.zh = {
+        time: "发布时间：",
+        description: "物品描述:"
+    }
+
+    $scope.barter.loadContent = function () {
+        var data = JSON.stringify({
+            "type": "get-barter-info",
+            "barterSha1": $scope.barterSha1
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $scope.barter = data.data;
+            }
+<<<<<<< HEAD
         ];
         //$scope.fileStartUpload = function( $files, $event, $flow ) {
         //    $scope.flowObj.upload();
         //}
         $scope.release = function () {
+=======
+        });
+    }
+    $scope.toggleCollectBarter = function($event, barter) {
+        $event.stopPropagation();
+        if(barter.is_collected == 1) {
+>>>>>>> c896fff63d645c181fa155977a77dbbbc7516f2c
             var data = JSON.stringify({
-                "type": "create-barter",
-                "userName":$scope.username,
-                "title":$scope.barter.title,
-                "category":$scope.barter.category,
-                "description":$scope.barter.description
+                "type": "uncollect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
             });
             var postdata = "data=" + data;
             var responsePromise = apiServices.postRequest(postdata);
@@ -340,12 +684,119 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
+<<<<<<< HEAD
                     $scope.upload_data = {
                         username: $scope.username,
                         barterSha1: data.barterSha1
                     };
                     //$scope.barter.flowObj.upload();
+=======
+                    barter.is_collected = 0;
+                }
+            });
+        } else {
+            var data = JSON.stringify({
+                "type": "collect-barter",
+                "barterSha1": barter.barterSha1,
+                "userName": $scope.username
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    alert(data.info);
+                    return;
+                } else {
+                    barter.is_collected = 1;
+>>>>>>> c896fff63d645c181fa155977a77dbbbc7516f2c
                 }
             });
         }
-    })
+    }
+    $scope.barter.loadContent();
+})
+
+.controller('UserInfoCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.creatorName = $cookies.get("user");
+    var data = JSON.stringify({
+        "type": "get-user-info",
+        "user_name": $scope.creatorName
+    });
+    var postdata = "data=" + data;
+    var responsePromise = apiServices.postRequest(postdata);
+    responsePromise.success(function (data, status, headers) {
+        if (data.ret != '1101') {
+            alert(data.info);
+            return;
+        } else {
+            $scope.modal.userInfo = data.data;
+        }
+    });
+})
+.controller('ReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
+    if(!$cookies.get("username")){
+        $state.go('app.login');
+    } else {
+        $scope.username = $cookies.get("username");
+    }
+    $scope.barter = {};
+    $scope.categoryList = [
+        {
+            value:1,
+            name:"图书"
+        },
+        {
+            value:2,
+            name:"服装"
+        },
+        {
+            value:3,
+            name:"食品"
+        },
+        {
+            value:4,
+            name:"电子产品"
+        },
+        {
+            value:5,
+            name:"体育用品"
+        },
+        {
+            value:6,
+            name:"户外用品"
+        },
+        {
+            value:7,
+            name:"生活用品"
+        }
+    ];
+    $scope.release = function () {
+        var data = JSON.stringify({
+            "type": "create-barter",
+            "userName":$scope.username,
+            "title":$scope.barter.title,
+            "category":$scope.barter.category,
+            "description":$scope.barter.description
+        });
+        var postdata = "data=" + data;
+        var responsePromise = apiServices.postRequest(postdata);
+        responsePromise.success(function (data, status, headers) {
+            if (data.ret != '1101') {
+                alert(data.info);
+                return;
+            } else {
+                $scope.barterSha1 = data.barterSha1;
+                $scope.barter.flowObj.opts.query = {
+                    userName : $scope.username,
+                    barterSha1 : $scope.barterSha1
+                };
+                $scope.barter.flowObj.upload();
+            }
+        });
+    }
+})

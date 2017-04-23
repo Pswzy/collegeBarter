@@ -687,6 +687,10 @@ def head(request):
     username = request.session['username']
     return render_to_response("head.html",{"username":username})
 
+def barterDetail(request):
+    username = request.session['username']
+    return render_to_response("barterDetail.html",{"username":username})
+
 def loginhtml(request):
     return render_to_response("login.html")
 
@@ -708,3 +712,11 @@ def myReleasehtml(request):
 def releasehtml(request):
     username = request.session['username']
     return render_to_response("release.html",{"username":username})
+
+def barterDetailhtml(request):
+    username = request.session['username']
+    return render_to_response("barterDetail.html",{"username":username})
+
+def userInfohtml(request):
+    username = request.session['username']
+    return render_to_response("userInfo.html",{"username":username})

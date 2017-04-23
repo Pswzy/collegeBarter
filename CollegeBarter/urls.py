@@ -25,6 +25,8 @@ urlpatterns = patterns('CollegeBarter.college_barter.views',
 	(r"^myCollect.html/$","myCollecthtml"),
 	(r"^myRelease.html/$","myReleasehtml"),
 	(r"^release.html/$","releasehtml"),
+	(r"^barterDetail.html/$","barterDetailhtml"),
+	(r"^userInfo.html/$","userInfohtml"),
 	(r"^$","index"),
     (r"^request/$","android_request"),
 	(r"^api/$","android_request"),
@@ -35,6 +37,7 @@ urlpatterns = patterns('CollegeBarter.college_barter.views',
     (r"^userInfo/$","userInfo"),
     (r"^myRelease/$","myRelease"),
     (r"^myCollect/$","myCollect"),
+    (r"^barterDetail/$","barterDetail"),
 )
 
 

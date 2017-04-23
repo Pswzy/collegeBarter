@@ -1,30 +1,32 @@
 <ui-view>
-    <div class="container-fluid background-all">
+    <div  class="">
         <div class="col-md-offset-1 col-md-10 cate-nav">
             <div class="col-md-1 cate-title"><span>分类：</span>
             </div>
             <ul class="col-md-10 cate-list nav nav-pills" role="tablist">
-                <li role="presentation"><a>全部</a></li>
-                <li role="presentation"><a>图书</a></li>
-                <li role="presentation"><a>服装</a></li>
-                <li role="presentation"><a>食品</a></li>
-                <li role="presentation"><a>电子产品</a></li>
-                <li role="presentation"><a>体育用品</a></li>
-                <li role="presentation"><a>户外用品</a></li>
-                <li role="presentation"><a>生活用品</a></li>
+                <li role="presentation" ng-click="getBarterByCate(0)" ng-class="{true:'active-cate active',false:''}[category==0]"><a>全部</a></li>
+                <li role="presentation" ng-click="getBarterByCate(1)" ng-class="{true:'active-cate active',false:''}[category==1]"><a>图书</a></li>
+                <li role="presentation" ng-click="getBarterByCate(2)" ng-class="{true:'active-cate active',false:''}[category==2]"><a>服装</a></li>
+                <li role="presentation" ng-click="getBarterByCate(3)" ng-class="{true:'active-cate active',false:''}[category==3]"><a>食品</a></li>
+                <li role="presentation" ng-click="getBarterByCate(4)" ng-class="{true:'active-cate active',false:''}[category==4]"><a>电子产品</a></li>
+                <li role="presentation" ng-click="getBarterByCate(5)" ng-class="{true:'active-cate active',false:''}[category==5]"><a>体育用品</a></li>
+                <li role="presentation" ng-click="getBarterByCate(6)" ng-class="{true:'active-cate active',false:''}[category==6]"><a>户外用品</a></li>
+                <li role="presentation" ng-click="getBarterByCate(7)" ng-class="{true:'active-cate active',false:''}[category==7]"><a>生活用品</a></li>
             </ul>
         </div>
-        <div class="col-md-offset-1 col-md-10">
-            <div class="col-md-3" ng-repeat="v in barter">
-                <img class="barter-img-show" ng-src="{$upload_image_url + v.image_one_sha1$}"/>
-
+        <div class="col-md-offset-1 col-md-10 barter-list">
+            <div class="col-md-3 barter" ng-repeat="v in barter" ng-click="showdetail(v)">
+                <img class="barter-img-show" ng-src="{$resize_image_url + v.image_one_sha1$}"/>
                 <h2>{$v.title$}</h2>
-                <img class="" ng-src="{$upload_image_url + v.headimg$}"/>
-                <span>{$v.creatorName$}</span>
+                <img class="img-circle head-img" ng-src="{$upload_image_url + v.headimg$}" ng-click="getUserInfo($event,v)"/>
+                <span class="creator-name">{$v.creatorName$}</span>
 
-                <p>{$v.content$}</p>
-                <span>{$v.time$}</span>
+                <p class="discription">{$v.content$}</p>
+                <span class="create-time">{$v.time$}</span>
+                <span class="glyphicon glyphicon-star" ng-if="v.is_collected==1" ng-click="toggleCollectBarter($event,v)"></span>
+                <span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>
             </div>
         </div>
+        <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>
     </div>
 </ui-view>

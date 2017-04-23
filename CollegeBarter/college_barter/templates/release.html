@@ -29,11 +29,20 @@
             <div class="form-group">
                 <label class="col-sm-2 control-label">照片</label>
                 <div class="col-sm-8">
+<<<<<<< HEAD
                     <div flow-init="{'query':upload_data}"
+=======
+                    <div class=""
+                         flow-init
+>>>>>>> c896fff63d645c181fa155977a77dbbbc7516f2c
                          flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
-                         flow-files-submitted="$flow.upload()"
-                         flow-file-success="fileSuccess($file, $message, $flow )"
                          flow-name="barter.flowObj"
+                         flow-file-success="fileSuccess($file, $message, $flow )"
+<<<<<<< HEAD
+                         flow-name="barter.flowObj"
+=======
+                         flow-file-progress="fileProgress($file, $flow)"
+>>>>>>> c896fff63d645c181fa155977a77dbbbc7516f2c
                             >
                         <ul class="list-inline">
                             <li class="barter-img-list" ng-show="$flow.files.length" ng-repeat="file in $flow.files">

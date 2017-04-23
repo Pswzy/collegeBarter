@@ -1,20 +1,60 @@
 <ui-view>
-    <div class="container-fluid">
-    <div class="nav head">
-        <div class="head-left col-md-offset-1 col-md-2">
-            <img class="logo" src="../media/images/logo.jpg"/>
-            <h4>{$title$}</h4>
+    <div class="container-fluid page">
+        <div class="nav head">
+            <div class="head-left col-md-offset-1 col-md-2">
+                <img class="logo" src="../media/images/logo.jpg"/>
+                <h4>{$title$}</h4>
+            </div>
+            <div class="head-mid col-md-7">
+                <ul class="nav nav-pills" role="tablist">
+                    <li role="presentation" ng-class="{true:'active',false:''}[data.nav1]" ng-click="data.nav1=true;data.nav2=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.recent">{$nav.nav1$}</a></li>
+                    <li role="presentation" ng-class="{true:'active',false:''}[data.nav2]" ng-click="data.nav2=true;data.nav1=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.release">{$nav.nav2$}</a></li>
+                    <li role="presentation" ng-class="{true:'active',false:''}[data.nav3]" ng-click="data.nav3=true;data.nav2=false;data.nav1=false;data.nav4=false;"><a ui-sref="app.myRelease">{$nav.nav3$}</a></li>
+                    <li role="presentation" ng-class="{true:'active',false:''}[data.nav4]" ng-click="data.nav4=true;data.nav2=false;data.nav3=false;data.nav1=false;"><a ui-sref="app.myCollect">{$nav.nav4$}</a></li>
+                </ul>
+            </div>
+            <div class="head-right col-md-1">
+                <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
+                    <!--<img class="img-circle user-head" ng-src="{$upload_image_url + userInfo.headimg$}"/>-->
+                <!--</button>-->
+                <img class="img-circle user-head" ng-src="{$upload_image_url + userInfo.headimg$}" ng-click="toggleLink()"/>
+                <ul class="dropdown-menu show-link" ng-if="head.state">
+                    <li ng-click="getUserInfo()" data-toggle="modal" data-target="#myModal"><a>{$ head.user $}</a></li>
+                    <li ng-click="logout()"><a>{$ head.logout $}</a></li>
+                </ul>
+            </div>
         </div>
-        <div class="head-mid col-md-7">
-            <ul class="nav nav-pills" role="tablist">
-                <li role="presentation" ng-class="{true:'active',false:''}[data.nav1]" ng-click="data.nav1=true;data.nav2=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.recent">{$nav.nav1$}</a></li>
-                <li role="presentation" ng-class="{true:'active',false:''}[data.nav2]" ng-click="data.nav2=true;data.nav1=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.release">{$nav.nav2$}</a></li>
-                <li role="presentation" ng-class="{true:'active',false:''}[data.nav3]" ng-click="data.nav3=true;data.nav2=false;data.nav1=false;data.nav4=false;"><a ui-sref="app.myRelease">{$nav.nav3$}</a></li>
-                <li role="presentation" ng-class="{true:'active',false:''}[data.nav4]" ng-click="data.nav4=true;data.nav2=false;data.nav3=false;data.nav1=false;"><a ui-sref="app.myCollect">{$nav.nav4$}</a></li>
-            </ul>
+        <div ui-view="menuContent" class="container-fluid background-all"></div>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel">{$modal.title$}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td class="user-info-td-left">{$modal.username$}</td><td class="user-info-td-right"> {$modal.userInfo.username$}</td>
+                                </tr>
+                                <tr>
+                                    <td class="user-info-td-left">{$modal.realname$}</td><td class="user-info-td-right"> {$modal.userInfo.realname$}</td>
+                                </tr>
+                                <tr>
+                                    <td class="user-info-td-left">{$modal.school$}</td><td class="user-info-td-right"> {$modal.userInfo.school$}</td>
+                                </tr>
+                                <tr>
+                                    <td class="user-info-td-left">{$modal.phoneNum$}</td><td class="user-info-td-right"> {$modal.userInfo.mobile$}</td>
+                                </tr>
+                                <tr>
+                                    <td class="user-info-td-left">{$modal.qq$}</td><td class="user-info-td-right"> {$modal.userInfo.qq$}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="head-right col-md-2"></div>
-    </div>
-    <div ui-view="menuContent"></div>
     </div>
 </ui-view>

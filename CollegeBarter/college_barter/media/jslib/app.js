@@ -84,6 +84,15 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
                     }
                 }
             })
+            .state('app.barterDetail', {
+                url: '/barterDetail',
+                views:{
+                    'menuContent':{
+                        templateUrl: 'barterDetail.html',
+                        controller: 'BarterDetailCtrl'
+                    }
+                }
+            })
 
         $urlRouterProvider.otherwise('/login');
     });
