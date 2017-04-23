@@ -4,7 +4,7 @@
       flow-files-submitted="$flow.upload()">
 <head>
   <title>Image</title>
-  <script src="../../../angular/angular.js"></script>
+  <script src="../../bower_components/angular/angular.js"></script>
   <script src="../../dist/ng-flow-standalone.js"></script>
   <script src="app.js"></script>
   <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
@@ -25,8 +25,8 @@
     <div class="thumbnail" ng-hide="$flow.files.length">
       <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
     </div>
-    <div class="thumbnail" ng-show="$flow.files.length" ng-repeat="file in $flow.files">
-      <img flow-img="file" />
+    <div class="thumbnail" ng-show="$flow.files.length">
+      <img flow-img="$flow.files[0]" />
     </div>
     <div>
       <a href="#" class="btn" ng-hide="$flow.files.length" flow-btn flow-attrs="{accept:'image/*'}">Select image</a>

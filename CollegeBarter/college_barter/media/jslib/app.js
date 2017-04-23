@@ -15,7 +15,7 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
             target:'ajax_upload',
             permanentErrors: [404, 500, 501],
             singleFile:false,
-            chunkSize:1*1024*1024,
+            chunkSize:1*1024*1024*1024,
             forceChunkSize:false,
             simultaneousUploads:3,
             fileParameterName:'file',
@@ -25,7 +25,9 @@ angular.module('starter', ['starter.controllers', 'starter.directives', 'starter
             testMethod:'GET',
             uploadMethod:'POST',
             allowDuplicateUploads:false,
-            testChunks:false
+            testChunks:false,
+            maxChunkRetries: 1,
+            flowChunkNumber: 1
         };
     }])
 

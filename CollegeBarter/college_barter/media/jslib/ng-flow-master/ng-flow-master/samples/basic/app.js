@@ -11,17 +11,9 @@ var app = angular.module('app', ['flow'])
   flowFactoryProvider.defaults = {
     target: 'upload.php',
     permanentErrors: [404, 500, 501],
-    singleFile:false,
-    chunkSize:1*1024*1024,
-    forceChunkSize:false,
-    simultaneousUploads:3,
-    fileParameterName:'file',
-    query:{},
-    withCredentials:false,
-    method:'multipart',
-    testMethod:'POST',
-    uploadMethod:'POST',
-    allowDuplicateUploads:false
+    maxChunkRetries: 1,
+    chunkRetryInterval: 5000,
+    simultaneousUploads: 4
   };
   flowFactoryProvider.on('catchAll', function (event) {
     console.log('catchAll', arguments);

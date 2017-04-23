@@ -289,7 +289,7 @@ angular.module('starter.controllers', [])
         $scope.barter.loadContent();
     })
 
-    .controller('ReleaseCtrl', function ($scope, $state, $cookies, apiServices, flowFactoryProvider) {
+    .controller('ReleaseCtrl', function ($scope, $state, $cookies, apiServices) {
         if(!$cookies.get("username")){
             $state.go('app.login');
         } else {
@@ -322,6 +322,9 @@ angular.module('starter.controllers', [])
                 name:"户外用品"
             }
         ];
+        //$scope.fileStartUpload = function( $files, $event, $flow ) {
+        //    $scope.flowObj.upload();
+        //}
         $scope.release = function () {
             var data = JSON.stringify({
                 "type": "create-barter",
@@ -337,8 +340,11 @@ angular.module('starter.controllers', [])
                     alert(data.info);
                     return;
                 } else {
-                    $scope.barterSha1 = data.barterSha1;
-                    flowFactoryProvider.upload();
+                    $scope.upload_data = {
+                        username: $scope.username,
+                        barterSha1: data.barterSha1
+                    };
+                    //$scope.barter.flowObj.upload();
                 }
             });
         }

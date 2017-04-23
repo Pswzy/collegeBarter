@@ -657,8 +657,8 @@ def get_image_format(image):
     return image.split('.')[-1]
 
 def index(request):
-    username = request.session['username']
-    return render_to_response("index.html",{"username":username})
+#    username = request.session['username']
+    return render_to_response("index.html")
 
 def login(request):
     return render_to_response("login.html")

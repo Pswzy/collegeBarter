@@ -2,7 +2,7 @@
 <html ng-app="app" flow-init>
 <head>
   <title>basic</title>
-  <script src="../../../angular/angular.js"></script>
+  <script src="../../bower_components/angular/angular.js"></script>
   <script src="../../dist/ng-flow-standalone.js"></script>
   <script src="app.js"></script>
   <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"
@@ -57,7 +57,6 @@
       <th>Uploading</th>
       <th>Completed</th>
       <th>Settings</th>
-
     </tr>
     </thead>
     <tbody>
@@ -72,7 +71,6 @@
       <td>{{file.paused}}</td>
       <td>{{file.isUploading()}}</td>
       <td>{{file.isComplete()}}</td>
-
       <td>
         <div class="btn-group">
           <a class="btn btn-mini btn-warning" ng-click="file.pause()" ng-hide="file.paused">
@@ -92,12 +90,7 @@
     </tr>
     </tbody>
   </table>
-  <div ng-repeat="file in $flow.files">
-    <img flow-img="file" />
-  </div>
-   <div>
-     <img ng-src="">
-   </div>
+
   <hr class="soften"/>
 
   <div class="alert" flow-drop flow-drag-enter="class='alert-success'" flow-drag-leave="class=''"
