@@ -42,6 +42,7 @@ class Barter(models.Model):
     description=models.TextField()
     category=models.CharField(max_length=140,default='')
     title=models.CharField(max_length=140,default='')
+    saleState=models.IntegerField(default=0)
 
     class Meta:
         db_table = 'collegebarter_barter'

@@ -13,5 +13,7 @@
             <img class="col-md-3 barter-img-show" ng-if="barter.image_three_sha1!==''" ng-src="{$resize_image_url + barter.image_three_sha1$}"/>
             <img class="col-md-3 barter-img-show" ng-if="barter.image_four_sha1!==''" ng-src="{$resize_image_url + barter.image_four_sha1$}"/>
         </div>
+        <h1 ng-if="barter.saleState !== 0">{$barter.barterState$}</h1>
+        <h1 ng-if="barter.saleState === 0"><button ng-click="changeBarterState()">拍下物品</button></h1>
     </div>
 </ui-view>

@@ -133,7 +133,8 @@ def android_request(request):
             category=command['category']
             barter_sha1=hashlib.sha1(title+str(time.time())).hexdigest()
             now_time=time.strftime('%Y-%m-%d %H:%M')
-            barter=Barter(sha1=barter_sha1,description=description,category=category,userName=username,time=now_time,title=title)
+            saleState = 0
+            barter=Barter(sha1=barter_sha1,description=description,category=category,userName=username,time=now_time,title=title,saleState=saleState)
             barter.save()
             rsdic['barterSha1']=barter_sha1
             rsdic['userName']=username
@@ -164,6 +165,7 @@ def android_request(request):
                 dic['creatorName']=barter.userName
                 dic['title']=barter.title
                 dic['time']=barter.time
+                dic['saleState']=barter.saleState
                 is_collect=UserCollection.objects.filter(userName=username,barterSha1=barter.sha1)
                 if len(is_collect)==0:
                     dic['is_collected']=0
@@ -243,6 +245,7 @@ def android_request(request):
                 dic['is_collected']=1
                 dic['title']=barter.title
                 dic['time']=barter.time
+                dic['saleState']=barter.saleState
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -315,6 +318,7 @@ def android_request(request):
                 dic['creatorName']=barter.userName
                 dic['title']=barter.title
                 dic['time']=barter.time
+                dic['saleState']=barter.saleState
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -381,6 +385,7 @@ def android_request(request):
             dic['content']=barter.description
             dic['title']=barter.title
             dic['time']=barter.time
+            dic['saleState']=barter.saleState
             try:
                 user=User.objects.get(username=barter.userName)
             except:
@@ -457,6 +462,7 @@ def android_request(request):
                 dic['creatorName']=barter.userName
                 dic['title']=barter.title
                 dic['time']=barter.time
+                dic['saleState']=barter.saleState
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -565,6 +571,28 @@ def android_request(request):
             userCollections.delete()
             barterImages=BarterImage.objects.filter(barterSha1=barterSha1)
             barterImages.delete()
+        except Exception,e:
+            rsdic['ret']=1104
+            rsdic['info']=str(e)
+            print str(e)
+            return HttpResponse(json.dumps(rsdic))
+        finally:
+            return HttpResponse(json.dumps(rsdic))
+
+    elif type=="change-salestate":
+        rsdic=check_login(request)
+        if rsdic['ret']!=1101:
+            return HttpResponse(json.dumps(rsdic))
+        try:
+            barterSha1=command['barterSha1']
+            saleState=command['saleState']
+            try:
+                barter=Barter.objects.get(sha1=barterSha1)
+            except:
+                rsdic={'ret':'1105','info':'Barter does not exists'}
+                return
+            barter.saleState = saleState
+            barter.save()
         except Exception,e:
             rsdic['ret']=1104
             rsdic['info']=str(e)

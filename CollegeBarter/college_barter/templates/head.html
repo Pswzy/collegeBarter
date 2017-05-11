@@ -1,19 +1,19 @@
 <ui-view>
     <div class="container-fluid page">
         <div class="nav head">
-            <div class="head-left col-md-offset-1 col-md-2">
+            <div class="head-left">
                 <img class="logo" src="../media/images/logo.jpg"/>
-                <h4>{$title$}</h4>
+                <!--<h4>{$title$}</h4>-->
             </div>
-            <div class="head-mid col-md-7">
-                <ul class="nav nav-pills" role="tablist">
+            <div class="head-mid">
+                <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" ng-class="{true:'active',false:''}[data.nav1]" ng-click="data.nav1=true;data.nav2=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.recent">{$nav.nav1$}</a></li>
                     <li role="presentation" ng-class="{true:'active',false:''}[data.nav2]" ng-click="data.nav2=true;data.nav1=false;data.nav3=false;data.nav4=false;"><a ui-sref="app.release">{$nav.nav2$}</a></li>
                     <li role="presentation" ng-class="{true:'active',false:''}[data.nav3]" ng-click="data.nav3=true;data.nav2=false;data.nav1=false;data.nav4=false;"><a ui-sref="app.myRelease">{$nav.nav3$}</a></li>
                     <li role="presentation" ng-class="{true:'active',false:''}[data.nav4]" ng-click="data.nav4=true;data.nav2=false;data.nav3=false;data.nav1=false;"><a ui-sref="app.myCollect">{$nav.nav4$}</a></li>
                 </ul>
             </div>
-            <div class="head-right col-md-1">
+            <div class="head-right">
                 <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
                     <!--<img class="img-circle user-head" ng-src="{$upload_image_url + userInfo.headimg$}"/>-->
                 <!--</button>-->
@@ -24,7 +24,7 @@
                 </ul>
             </div>
         </div>
-        <div ui-view="menuContent" class="container-fluid background-all"></div>
+        <div ui-view="menuContent" class="background-all"></div>
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
