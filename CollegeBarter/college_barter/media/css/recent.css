@@ -101,6 +101,7 @@ span.glyphicon.glyphicon-star-empty {
 /*卡片样式*/
 .card {
     width: 233.5px;
+    float: left;
     margin: 7px;
     background-color: #fff;
     border: 1px solid #9c9c9c

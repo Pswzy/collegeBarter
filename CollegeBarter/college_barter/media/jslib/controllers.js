@@ -7,10 +7,10 @@ angular.module('starter.controllers', [])
     } else {
         $scope.username = $cookies.get("username");
     }
-    // $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
-    // $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
-    $scope.resize_image_url = "/media/resize_image/resize_";
-    $scope.upload_image_url = "/media/upload_image/";
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    // $scope.resize_image_url = "/media/resize_image/resize_";
+    // $scope.upload_image_url = "/media/upload_image/";
     $scope.head = {
         user: "用户信息",
         logout: "注销登录",
@@ -183,10 +183,10 @@ angular.module('starter.controllers', [])
     $scope.numOfLoadContent = 10;
     $scope.end = $scope.start + $scope.numOfLoadContent;
     $scope.category = 0;
-    // $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
-    // $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
-    $scope.resize_image_url = "/media/resize_image/resize_";
-    $scope.upload_image_url = "/media/upload_image/";
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    // $scope.resize_image_url = "/media/resize_image/resize_";
+    // $scope.upload_image_url = "/media/upload_image/";
     $scope.loadmore = {
         zh:"加载更多",
         state:false
@@ -454,8 +454,10 @@ angular.module('starter.controllers', [])
     $scope.start = 0;
     $scope.numOfLoadContent = 10;
     $scope.end = $scope.start + $scope.numOfLoadContent;
-    $scope.resize_image_url = "/media/resize_image/resize_";
-    $scope.upload_image_url = "/media/upload_image/";
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    // $scope.resize_image_url = "/media/resize_image/resize_";
+    // $scope.upload_image_url = "/media/upload_image/";
     $scope.voidContent = "没有发布的物品！"
 
     $scope.barter.loadContent = function () {
@@ -579,8 +581,10 @@ angular.module('starter.controllers', [])
     $scope.start = 0;
     $scope.numOfLoadContent = 10;
     $scope.end = $scope.start + $scope.numOfLoadContent;
-    $scope.resize_image_url = "/media/resize_image/resize_";
-    $scope.upload_image_url = "/media/upload_image/";
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    // $scope.resize_image_url = "/media/resize_image/resize_";
+    // $scope.upload_image_url = "/media/upload_image/";
     $scope.voidContent = "没有收藏的物品！"
     $scope.barter.loadContent = function () {
         var data = JSON.stringify({
@@ -695,8 +699,10 @@ angular.module('starter.controllers', [])
     } else {
         $scope.username = $cookies.get("username");
     }
-    $scope.resize_image_url = "/media/resize_image/resize_";
-    $scope.upload_image_url = "/media/upload_image/";
+    $scope.resize_image_url = "http://collegebarter.cn/media/resize_image/resize_";
+    $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
+    // $scope.resize_image_url = "/media/resize_image/resize_";
+    // $scope.upload_image_url = "/media/upload_image/";
     $scope.barter = {};
     $scope.barterSha1 = $cookies.get("barterSha1");
     $scope.zh = {
@@ -874,8 +880,8 @@ angular.module('starter.controllers', [])
                     userName : $scope.username,
                     barterSha1 : $scope.barterSha1
                 };
+                console.log($scope.barter.flowObj);
                 $scope.barter.flowObj.upload();
-                $state.go('app.recent');
             }
         });
     }
