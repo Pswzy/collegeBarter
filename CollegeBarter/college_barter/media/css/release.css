@@ -31,3 +31,21 @@ input.upload-img {
     opacity: 0;
     z-index: 2;
 }
+.list-inline li.barter-img-list {
+    position: relative;
+} 
+.delete-img{
+    position: absolute;
+    z-index: 10;
+    top: -1px;
+    right: -5px;
+}
+.delete-img img{
+    width: 20px;
+    height: 20px;
+}
+
+.error-text {
+    text-align: center;
+    color: red;
+}

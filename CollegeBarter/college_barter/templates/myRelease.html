@@ -1,18 +1,21 @@
 <ui-view>
-    <div class="recent">    
-        <div class="barter-list">
-            <div class="barter" ng-repeat="v in barter" ng-click="showdetail(v)">
-                <img class="barter-img-show" ng-src="{$resize_image_url + v.image_one_sha1$}"/>
-                <div class="barter-title">{$v.title$}</div>
-                <img class="img-circle head-img" ng-src="{$upload_image_url + v.headimg$}" ng-click="getUserInfo($event,v)"/>
-                <!--<span class="creator-name">{$v.creatorName$}</span>-->
-                <p class="barter-discription">{$v.content$}</p>
-                <!--<span class="create-time">{$v.time$}</span>-->
-                <!--<span class="glyphicon glyphicon-star" ng-if="v.is_collected==1" ng-click="toggleCollectBarter($event,v)"></span>-->
-                <!--<span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>-->
+    <div class="recent">
+        <div class="card-list">
+            <div class="card" ng-repeat="v in barter" ng-click="showdetail(v)">
+                <img ng-src="{$resize_image_url + v.image_one_sha1$}"/>
+                <div class="card-info">
+                    <h4 class="name">{$v.title$}</h4>
+                    <div class="star">
+                        <span class="glyphicon glyphicon-star" ng-if="v.is_collected==1" ng-click="toggleCollectBarter($event,v)"></span>
+                        <span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>
+                    </div>
+                    <p class="">{$v.content$}</p>
+                    <div class="status" ng-if="v.saleState !== 0">交易中</div>
+                    <div class="saler">{$v.creatorName$}</div>
+                </div>
             </div>
             <div class="void-content" ng-if="barter.length == 0"><h1>{$voidContent$}</h1></div>
+            <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>
         </div>
-        <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>        
     </div>
 </ui-view>

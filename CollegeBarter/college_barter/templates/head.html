@@ -1,6 +1,7 @@
 <ui-view>
     <div class="container-fluid page">
-        <div class="nav head">
+        <div class="head-background">
+        <div class="header-inner">
             <div class="head-left">
                 <img class="logo" src="../media/images/logo.jpg"/>
                 <!--<h4>{$title$}</h4>-->
@@ -23,6 +24,7 @@
                     <li ng-click="logout()"><a>{$ head.logout $}</a></li>
                 </ul>
             </div>
+        </div>
         </div>
         <div ui-view="menuContent" class="background-all"></div>
         <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

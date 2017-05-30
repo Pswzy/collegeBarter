@@ -1,37 +1,37 @@
 @charset "utf-8";
-.head {
-    position: relative;
-    width: 100%;
-    height: 100px;
+.head-background {
+    background-color: #fff;
 }
-
-.head-left {
-    float: left;
-    height: 100%;
-}
-.head-left .logo {
-    height: 100%;
-}
-
-.head-mid {
-    float: left;
-    font-size: 20px;
-    height: 100%;
-    width: 990px;
+.header-inner {
+    width: 1000px;
+    height: 60px;
     margin: 0 auto;
-    /*margin-left: calc(50% - 495px);*/
-    padding-top: 20px;
+    position: relative;
+}
+.head-left {
+    position: absolute;
+    left: -100px;
+    width: 100px;
+}
+.head-left img{
+    width: 60px;
+}
+.head-mid {
+    font-size: 18px;
+    width: 900px;
+    padding-top: 13px;
 }
 
 .head-right {
-    float: left;
-    height: 100%;
+    position: absolute;
+    top: 5px;
+    right: 30px;
 }
 
 img.img-circle.user-head {
     /*position: absolute;
     top: 35px;
     left: 0;*/
-    height: 75px;
-    width: 75px;
+    height: 50px;
+    width: 50px;
 }

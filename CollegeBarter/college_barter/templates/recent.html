@@ -1,8 +1,7 @@
 <ui-view>
     <div class="recent">
-        <div class="nav cate-nav panel panel-default">
-            <div class="panel-heading"><span>分类：</span>
-            </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">分类：</div>
             <ul class="list-group" role="tablist">
                 <li class="list-group-item" role="presentation" ng-click="getBarterByCate(0)" ng-class="{true:'active-cate active',false:''}[category==0]"><a>全部</a></li>
                 <li class="list-group-item" role="presentation" ng-click="getBarterByCate(1)" ng-class="{true:'active-cate active',false:''}[category==1]"><a>图书</a></li>
@@ -26,19 +25,21 @@
                 <span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>
             </div>
         </div>-->
-        <div class="card" ng-repeat="v in barter" ng-click="showdetail(v)">
-            <img ng-src="{$resize_image_url + v.image_one_sha1$}"/>
-            <div class="card-info">
-                <h4 class="name">{$v.title$}</h4>
-                <div class="star">
-                    <span class="glyphicon glyphicon-star" ng-if="v.is_collected==1" ng-click="toggleCollectBarter($event,v)"></span>
-                    <span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>
+        <div class="card-list">
+            <div class="card" ng-repeat="v in barter" ng-click="showdetail(v)">
+                <img ng-src="{$resize_image_url + v.image_one_sha1$}"/>
+                <div class="card-info">
+                    <h4 class="name">{$v.title$}</h4>
+                    <div class="star">
+                        <span class="glyphicon glyphicon-star" ng-if="v.is_collected==1" ng-click="toggleCollectBarter($event,v)"></span>
+                        <span class="glyphicon glyphicon-star-empty" ng-if="v.is_collected==0" ng-click="toggleCollectBarter($event,v)"></span>
+                    </div>
+                    <p class="">{$v.content$}</p>
+                    <div class="status" ng-if="v.saleState !== 0"><span class="card-status">交易中<span></div>
+                    <div class="saler">{$v.creatorName$}</div>
                 </div>
-                <p class="detail">{$v.content$}</p>
-                <div class="status">交易中</div>
-                <div class="saler">{$v.creatorName$}<div>
             </div>
+            <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>
         </div>
-        <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>
     </div>
 </ui-view>
