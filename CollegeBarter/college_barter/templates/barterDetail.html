@@ -13,8 +13,14 @@
             <!--<span class="glyphicon glyphicon-star-empty detail-collect" ng-if="barter.is_collected==0" ng-click="toggleCollectBarter($event,barter)"></span>-->
             <img class="detail-head" ng-src="{$upload_image_url + barter.headimg$}"/>
             <span class="detail-creator">{$barter.creatorName$}</span>
-            <div class="buy pull-right" ng-if="barter.saleState !== 0">交易中</div>
-            <div class="buy pull-right" ng-if="barter.saleState === 0" ng-click="changeBarterState()">拍下</div>
+            <!--<div class="buy pull-right" ng-if="barter.saleState !== 0 && barter.creatorName !== username">交易中</div>-->
+            <div class="state pull-right" ng-if="barter.creatorName === username">
+                <select class="form-control" ng-model="barter.saleState"
+                        ng-options="item.value as item.name for item in categoryList" ng-change="changeBarterState(barter.saleState)">
+                    <!--<option value="">更改状态</option>-->
+                </select>
+            </div>
+            <div class="buy pull-right" ng-if="barter.saleState === 0 && barter.creatorName !== username" ng-click="changeBarterState(1)">拍下</div>
         </div>
         <div class="">
             <img class="barter-img-show" ng-if="barter.image_one_sha1!==''" ng-src="{$resize_image_url + barter.image_one_sha1$}"/>

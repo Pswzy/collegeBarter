@@ -156,3 +156,10 @@
     width: 190px;
     height:100px;
 }
+
+.reg-validation {
+    text-align: center;
+    padding-bottom: 5px;
+    color: red;
+    font-size: 16px;
+}

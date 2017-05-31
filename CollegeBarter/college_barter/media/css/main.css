@@ -105,6 +105,19 @@ ul.dropdown-menu.show-link {
     margin-top: 5px;
     color: #fff;
 }
+.detail .state {
+    width: 100px;
+    /*background: #3ad6ce;*/
+    height: 30px;
+    /*border: 1px solid #3ad6ce;*/
+    display: inline-block;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 16px;
+    line-height: 30px;
+    margin-top: 5px;
+    color: #fff;
+}
 .detail-title .delete{
     position: absolute;
     right: 110px;

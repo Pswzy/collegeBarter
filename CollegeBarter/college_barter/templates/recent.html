@@ -26,7 +26,7 @@
             </div>
         </div>-->
         <div class="card-list">
-            <div class="card" ng-repeat="v in barter" ng-click="showdetail(v)">
+            <div class="card" ng-repeat="v in barter" ng-click="showdetail(v)" ng-if="v.saleState !== 2">
                 <img ng-src="{$resize_image_url + v.image_one_sha1$}"/>
                 <div class="card-info">
                     <h4 class="name">{$v.title$}</h4>

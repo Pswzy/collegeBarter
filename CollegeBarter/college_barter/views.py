@@ -75,8 +75,9 @@ def android_request(request):
                     rsdic={'info':'User does not exist','ret':1104}
                     return
             elif users[0].is_register==1:
-                rsdic={'info':'is_registered','ret':1101}
+                rsdic={'info':'is_registered','ret':1102}
                 return
+            rsdic={'info':'ok','ret':1101}
             user=users[0]
             passwd=command['password']
             #user.usersha1=hashlib.sha1(command['userName']).hexdigest()

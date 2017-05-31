@@ -12,13 +12,15 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">用户名</label>
                                 <div class="col-sm-9">
-                                    <input type="text" class="form-control" placeholder="请输入用户名" ng-model="user.username"><span class="text-danger" ng-if="user.username ==''">{$user.usernameError$}</span>
+                                    <input type="text" class="form-control" placeholder="请输入用户名" ng-model="user.username">
+                                    <span class="text-danger" ng-if="user.username ==''">{$user.usernameError$}</span>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">密码</label>
                                 <div class="col-sm-9">
-                                    <input type="password" class="form-control" placeholder="请输入密码" ng-model="user.pwd"><span class="text-danger" ng-if="user.pwd ==''">{$user.pwdError$}</span>
+                                    <input type="password" class="form-control" placeholder="请输入密码" ng-model="user.pwd">
+                                    <span class="text-danger" ng-if="user.pwd ==''">{$user.pwdError$}</span>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -31,6 +33,7 @@
                     </div>
                     <div class="reg" ng-if="state === 'reg'">
                         <form class="form-horizontal" role="form">
+                            <div class="reg-validation">{$user.errorReg$}</div>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">用户名</label>
                                 <div class="col-sm-9">

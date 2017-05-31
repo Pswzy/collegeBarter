@@ -76,7 +76,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.userInfo = data.data;
@@ -95,7 +95,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.modal.userInfo = data.data;
@@ -126,7 +126,8 @@ angular.module('starter.controllers', [])
         sno: "",
         school: "",
         phone: "",
-        qqNum: ""
+        qqNum: "",
+        validation: true
     }
 
     $scope.schoolList = [
@@ -150,25 +151,77 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
+                $scope.user.errorText = '用户名或密码错误';
                 return;
             } else {
                 $cookies.put("username", data.username);
-                $state.go('app.recent')
+                $state.go('app.recent');
             }
         });
     };
 
     $scope.goToReg = function () {
-        $scope.state = "reg"
+        $scope.state = "reg";
     }
 
     $scope.backToLogin = function () {
-        $scope.state = "login"
+        $scope.state = "login";
     }
 
     $scope.reg = function () {
-
+        console.log($scope.user.school);
+        if ($scope.user.username === '') {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请填写用户名';
+        } else if ($scope.user.pwd === '') {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请填写密码';
+        } else if ($scope.user.pwdCheck === '' || $scope.user.pwd !== $scope.user.pwdCheck) {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '两次密码需填写一致';
+        } else if ($scope.user.sno === '') {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请填写学号';
+        } else if (!$scope.user.school) {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请选择学校';
+        } else if ($scope.user.phone === '') {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请填写手机号';
+        } else if ($scope.user.qqNum === '') {
+            $scope.user.validation = false;
+            $scope.user.errorReg = '请填写QQ号码';
+        } else {
+            var data = JSON.stringify({
+                "type": "user-register",
+                "userName": $scope.user.username,
+                "password": $scope.user.pwd,
+                "sno": $scope.user.sno,
+                "school": $scope.user.school.value,
+                "mobile": $scope.user.phone,
+                "qq": $scope.user.qqNum
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    $scope.user.validation = false;
+                    if (data.ret == '1102') {
+                        $scope.user.errorReg = '用户已经注册';
+                    } else if (data.ret == '1104') {
+                        $scope.user.errorReg = '用户不存在';
+                    } else {
+                        $scope.user.errorReg = '注册信息有误';
+                    }
+                    // alert(data.info);
+                    return;
+                } else {
+                    $cookies.put("username", $scope.user.username);
+                    $state.go('app.recent');
+                }
+            })
+        }
     }
 })
 
@@ -202,7 +255,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 if(data.data.length == $scope.numOfLoadContent) {
@@ -231,7 +284,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 0;
@@ -247,7 +300,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 1;
@@ -265,7 +318,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.modal.userInfo = data.data;
@@ -289,7 +342,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     if(data.data.length == $scope.numOfLoadContent) {
@@ -313,7 +366,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     if(data.data.length == $scope.numOfLoadContent) {
@@ -339,7 +392,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     if(data.data.length == $scope.numOfLoadContent) {
@@ -362,7 +415,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     if(data.data.length == $scope.numOfLoadContent) {
@@ -474,7 +527,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 if(data.data.length == $scope.numOfLoadContent) {
@@ -503,7 +556,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 0;
@@ -519,7 +572,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 1;
@@ -537,7 +590,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.modal.userInfo = data.data;
@@ -556,7 +609,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 if(data.data.length == $scope.numOfLoadContent) {
@@ -601,7 +654,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 if(data.data.length == $scope.numOfLoadContent) {
@@ -630,7 +683,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 0;
@@ -646,7 +699,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 1;
@@ -664,7 +717,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.modal.userInfo = data.data;
@@ -683,7 +736,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 if(data.data.length == $scope.numOfLoadContent) {
@@ -715,7 +768,20 @@ angular.module('starter.controllers', [])
         time: "发布时间：",
         description: "物品描述:"
     }
-
+    $scope.categoryList = [
+        {
+            value:0,
+            name:"在售"
+        },
+        {
+            value:1,
+            name:"交易中"
+        },
+        {
+            value:2,
+            name:"下架"
+        }
+    ];
     $scope.barter.loadContent = function () {
         var data = JSON.stringify({
             "type": "get-barter-info",
@@ -725,7 +791,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $scope.barter = data.data;
@@ -737,7 +803,7 @@ angular.module('starter.controllers', [])
                         $scope.barter.barterState = '交易中';
                         break;
                     case 2:
-                        $scope.barter.barterState = '已售出';
+                        $scope.barter.barterState = '下架';
                         break;
                     default:
                         break;
@@ -775,7 +841,7 @@ angular.module('starter.controllers', [])
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
                 $state.go('app.recent');
@@ -785,21 +851,35 @@ angular.module('starter.controllers', [])
     // $scope.cancel = function() {
     //     $('#deleteModal').modal('hide');
     // }
-    $scope.changeBarterState = function () {
+    $scope.changeBarterState = function (state) {
+        $scope.barter.saleState = state;
+        switch(state) {
+            case 0:
+                $scope.barter.barterState = '在售';
+                break;
+            case 1:
+                $scope.barter.barterState = '交易中';
+                break;
+            case 2:
+                $scope.barter.barterState = '下架';
+                break;
+            default:
+                break;
+        }
         var data = JSON.stringify({
             "type": "change-salestate",
             "barterSha1": $scope.barterSha1,
-            'saleState': 1
+            'saleState': state
         });
         var postdata = "data=" + data;
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
             if (data.ret != '1101') {
-                alert(data.info);
+                // alert(data.info);
                 return;
             } else {
-                $scope.barter.saleState = 1;
-                $scope.barter.barterState = '交易中'
+                // $scope.barter.saleState = 1;
+                // $scope.barter.barterState = '交易中';
             }
         });
     }
@@ -815,7 +895,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     $scope.upload_data = {
@@ -836,7 +916,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     barter.is_collected = 1;
@@ -862,7 +942,7 @@ angular.module('starter.controllers', [])
     var responsePromise = apiServices.postRequest(postdata);
     responsePromise.success(function (data, status, headers) {
         if (data.ret != '1101') {
-            alert(data.info);
+            // alert(data.info);
             return;
         } else {
             $scope.modal.userInfo = data.data;
@@ -939,7 +1019,7 @@ angular.module('starter.controllers', [])
             var responsePromise = apiServices.postRequest(postdata);
             responsePromise.success(function (data, status, headers) {
                 if (data.ret != '1101') {
-                    alert(data.info);
+                    // alert(data.info);
                     return;
                 } else {
                     $scope.barterSha1 = data.barterSha1;
