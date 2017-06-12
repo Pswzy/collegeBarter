@@ -131,9 +131,15 @@ angular.module('starter.controllers', [])
     }
 
     $scope.schoolList = [
-        {value: "中国矿业大学（北京）"},
-        {value: "中国农业大学"},
-        {value: "北京林业大学"}
+        {value: "中国矿业大学（北京）"},{value: "清华大学"},{value: "北京大学"},{value: "中国农业大学"},{value: "北京林业大学"},{value: "北京语言大学"},{value: "北京科技大学"},{value: "中国地质大学(北京)"},
+        {value: "北京航空航天大学"},{value: "中国人民大学"},{value: "北京交通大学"},{value: "中国石油大学（北京）"},{value: "北京邮电大学"},{value: "华北电力大学"},{value: "北京化工大学"},
+        {value: "北京中医药大学"},{value: "北京师范大学"},{value: "北京外国语大学"},{value: "对外经济贸易大学"},{value: "中央财经大学"},{value: "中国政法大学"},{value: "中央民族大学"},
+        {value: "中国人民公安大学"},{value: "北京协和医学院"},{value: "北京体育大学"},{value: "北京理工大学"},{value: "北京信息科技大学"},{value: "北京工商大学"},{value: "北京农学院"},
+        {value: "北京联合大学"},{value: "北京工业大学"},{value: "北方工业大学"},{value: "首都医科大学"},{value: "首都师范大学"},{value: "首都经济贸易大学"},{value: "中国传媒大学"},
+        {value: "国际关系学院"},{value: "中央美术学院"},{value: "中央戏剧学院"},{value: "中央音乐学院"},{value: "北京电子科技学院"},{value: "外交学院"},{value: "中国劳动关系学院"},
+        {value: "中国青年政治学院"},{value: "中华女子学院"},{value: "北京建筑大学"},{value: "北京服装学院"},{value: "北京印刷学院"},{value: "北京石油化工学院"},
+        {value: "首都体育学院"},{value: "北京第二外国语学院"},{value: "北京物资学院"},{value: "中国音乐学院"},{value: "北京舞蹈学院"},{value: "中国戏曲学院"},{value: "北京电影学院"},
+        {value: "北京城市学院"},{value: "北京吉利学院"},{value: "首钢工学院"}
     ];
     $scope.state = "login";
 
@@ -782,7 +788,7 @@ angular.module('starter.controllers', [])
             name:"下架"
         }
     ];
-    $scope.barter.loadContent = function () {
+    $scope.loadContent = function () {
         var data = JSON.stringify({
             "type": "get-barter-info",
             "barterSha1": $scope.barterSha1
@@ -813,24 +819,7 @@ angular.module('starter.controllers', [])
     }
 
     $scope.deleteBarter = function() {
-        // var res = confirm("确定要删除这个物品吗？");
         $('#deleteModal').modal('show');
-        // if(res) {
-        //     var data = JSON.stringify({
-        //         "type": "delete-barter",
-        //         "barterSha1": $scope.barterSha1
-        //     });
-        //     var postdata = "data=" + data;
-        //     var responsePromise = apiServices.postRequest(postdata);
-        //     responsePromise.success(function (data, status, headers) {
-        //         if (data.ret != '1101') {
-        //             alert(data.info);
-        //             return;
-        //         } else {
-        //             $state.go('app.recent');
-        //         }
-        //     });
-        // }
     }
     $scope.delete = function() {
         var data = JSON.stringify({
@@ -844,13 +833,14 @@ angular.module('starter.controllers', [])
                 // alert(data.info);
                 return;
             } else {
+                $scope.data.nav1 = true;
+                $scope.data.nav2 = false;
+                $scope.data.nav3 = false;
+                $scope.data.nav4 = false;
                 $state.go('app.recent');
             }
         });
     }
-    // $scope.cancel = function() {
-    //     $('#deleteModal').modal('hide');
-    // }
     $scope.changeBarterState = function (state) {
         $scope.barter.saleState = state;
         switch(state) {
@@ -869,7 +859,8 @@ angular.module('starter.controllers', [])
         var data = JSON.stringify({
             "type": "change-salestate",
             "barterSha1": $scope.barterSha1,
-            'saleState': state
+            'saleState': state,
+            'buyers': $scope.username
         });
         var postdata = "data=" + data;
         var responsePromise = apiServices.postRequest(postdata);
@@ -878,8 +869,24 @@ angular.module('starter.controllers', [])
                 // alert(data.info);
                 return;
             } else {
-                // $scope.barter.saleState = 1;
-                // $scope.barter.barterState = '交易中';
+                if ($scope.barter.creatorName != $scope.username) {
+                    var data = JSON.stringify({
+                        "type": "get-user-info",
+                        "user_name": $scope.barter.creatorName
+                    });
+                    var postdata = "data=" + data;
+                    var responsePromise = apiServices.postRequest(postdata);
+                    responsePromise.success(function (data, status, headers) {
+                        if (data.ret != '1101') {
+                            // alert(data.info);
+                            return;
+                        } else {
+                            $scope.modal.userInfo = data.data;
+                            $('#myModal').modal('show');
+                        }
+                    });
+                }
+                $scope.loadContent();
             }
         });
     }
@@ -924,7 +931,27 @@ angular.module('starter.controllers', [])
             });
         }
     }
-    $scope.barter.loadContent();
+    $scope.getUserInfo = function($event, barter) {
+        $event.stopPropagation();
+        if (barter.buyers == $scope.username) {
+            var data = JSON.stringify({
+                "type": "get-user-info",
+                "user_name": barter.creatorName
+            });
+            var postdata = "data=" + data;
+            var responsePromise = apiServices.postRequest(postdata);
+            responsePromise.success(function (data, status, headers) {
+                if (data.ret != '1101') {
+                    // alert(data.info);
+                    return;
+                } else {
+                    $scope.modal.userInfo = data.data;
+                    $('#myModal').modal('show');
+                }
+            });
+        }
+    }
+    $scope.loadContent();
 })
 
 .controller('UserInfoCtrl', function ($scope, $state, $cookies, apiServices) {
@@ -988,6 +1015,10 @@ angular.module('starter.controllers', [])
         {
             value:7,
             name:"生活用品"
+        },
+        {
+            value:8,
+            name:"其他"
         }
     ];
     $scope.release = function () {
@@ -1042,6 +1073,10 @@ angular.module('starter.controllers', [])
         // $scope.barter.description = '';
         // $scope.barter.category = '';
         // $scope.barter.flowObj.files.length = 0;
+        $scope.data.nav1 = true;
+        $scope.data.nav2 = false;
+        $scope.data.nav3 = false;
+        $scope.data.nav4 = false;
         $state.go('app.recent');
         }
     }

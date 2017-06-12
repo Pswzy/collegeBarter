@@ -135,7 +135,8 @@ def android_request(request):
             barter_sha1=hashlib.sha1(title+str(time.time())).hexdigest()
             now_time=time.strftime('%Y-%m-%d %H:%M')
             saleState = 0
-            barter=Barter(sha1=barter_sha1,description=description,category=category,userName=username,time=now_time,title=title,saleState=saleState)
+            buyers=''
+            barter=Barter(sha1=barter_sha1,description=description,category=category,userName=username,time=now_time,title=title,saleState=saleState,buyers=buyers)
             barter.save()
             rsdic['barterSha1']=barter_sha1
             rsdic['userName']=username
@@ -167,6 +168,7 @@ def android_request(request):
                 dic['title']=barter.title
                 dic['time']=barter.time
                 dic['saleState']=barter.saleState
+                dic['buyers']=barter.buyers
                 is_collect=UserCollection.objects.filter(userName=username,barterSha1=barter.sha1)
                 if len(is_collect)==0:
                     dic['is_collected']=0
@@ -247,6 +249,7 @@ def android_request(request):
                 dic['title']=barter.title
                 dic['time']=barter.time
                 dic['saleState']=barter.saleState
+                dic['buyers']=barter.buyers
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -320,6 +323,7 @@ def android_request(request):
                 dic['title']=barter.title
                 dic['time']=barter.time
                 dic['saleState']=barter.saleState
+                dic['buyers']=barter.buyers
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -387,6 +391,7 @@ def android_request(request):
             dic['title']=barter.title
             dic['time']=barter.time
             dic['saleState']=barter.saleState
+            dic['buyers']=barter.buyers
             try:
                 user=User.objects.get(username=barter.userName)
             except:
@@ -464,6 +469,7 @@ def android_request(request):
                 dic['title']=barter.title
                 dic['time']=barter.time
                 dic['saleState']=barter.saleState
+                dic['buyers']=barter.buyers
                 try:
                     user=User.objects.get(username=barter.userName)
                 except:
@@ -587,12 +593,14 @@ def android_request(request):
         try:
             barterSha1=command['barterSha1']
             saleState=command['saleState']
+            buyers=command['buyers']
             try:
                 barter=Barter.objects.get(sha1=barterSha1)
             except:
                 rsdic={'ret':'1105','info':'Barter does not exists'}
                 return
             barter.saleState = saleState
+            barter.buyers = buyers
             barter.save()
         except Exception,e:
             rsdic['ret']=1104

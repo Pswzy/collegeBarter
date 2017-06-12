@@ -11,8 +11,8 @@
         <div>
             <!--<span class="glyphicon glyphicon-star detail-collect pull-right" ng-if="barter.is_collected==1" ng-click="toggleCollectBarter($event,barter)"></span>-->
             <!--<span class="glyphicon glyphicon-star-empty detail-collect" ng-if="barter.is_collected==0" ng-click="toggleCollectBarter($event,barter)"></span>-->
-            <img class="detail-head" ng-src="{$upload_image_url + barter.headimg$}"/>
-            <span class="detail-creator">{$barter.creatorName$}</span>
+            <img class="detail-head" ng-click="getUserInfo($event,barter)" ng-src="{$upload_image_url + barter.headimg$}"/>
+            <span class="detail-creator" ng-click="getUserInfo($event,barter)">{$barter.creatorName$}</span>
             <!--<div class="buy pull-right" ng-if="barter.saleState !== 0 && barter.creatorName !== username">交易中</div>-->
             <div class="state pull-right" ng-if="barter.creatorName === username">
                 <select class="form-control" ng-model="barter.saleState"
@@ -39,7 +39,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="del_cancel">
-                            <button class="delete" ng-click="delete()">确认</button>
+                            <button class="delete" data-dismiss="modal" ng-click="delete()">确认</button>
                             <button class="cancel" data-dismiss="modal">取消</button>
                         </div>
                     </div>
