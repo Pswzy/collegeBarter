@@ -9,9 +9,8 @@
     <div class="detail">
         <h3>{$barter.title$}</h3>
         <div>
-            <!--<span class="glyphicon glyphicon-star detail-collect pull-right" ng-if="barter.is_collected==1" ng-click="toggleCollectBarter($event,barter)"></span>-->
-            <!--<span class="glyphicon glyphicon-star-empty detail-collect" ng-if="barter.is_collected==0" ng-click="toggleCollectBarter($event,barter)"></span>-->
-            <img class="detail-head" ng-click="getUserInfo($event,barter)" ng-src="{$upload_image_url + barter.headimg$}"/>
+            <img class="detail-head" ng-click="getUserInfo($event,barter)" ng-if="barter.headimg" ng-src="{$ upload_image_url + barter.headimg $}"/>
+            <img class="detail-head" ng-click="getUserInfo($event,barter)" ng-if="!barter.headimg" src="/media/upload_image/head1.jpg" />
             <span class="detail-creator" ng-click="getUserInfo($event,barter)">{$barter.creatorName$}</span>
             <!--<div class="buy pull-right" ng-if="barter.saleState !== 0 && barter.creatorName !== username">交易中</div>-->
             <div class="state pull-right" ng-if="barter.creatorName === username">
@@ -22,11 +21,11 @@
             </div>
             <div class="buy pull-right" ng-if="barter.saleState === 0 && barter.creatorName !== username" ng-click="changeBarterState(1)">拍下</div>
         </div>
-        <div class="">
-            <img class="barter-img-show" ng-if="barter.image_one_sha1!==''" ng-src="{$resize_image_url + barter.image_one_sha1$}"/>
-            <img class="barter-img-show" ng-if="barter.image_two_sha1!==''" ng-src="{$resize_image_url + barter.image_two_sha1$}"/>
-            <img class="barter-img-show" ng-if="barter.image_three_sha1!==''" ng-src="{$resize_image_url + barter.image_three_sha1$}"/>
-            <img class="barter-img-show" ng-if="barter.image_four_sha1!==''" ng-src="{$resize_image_url + barter.image_four_sha1$}"/>
+        <div class="" ng-if="barter.image_one_sha1">
+            <img class="barter-img-show" ng-if="barter.image_one_sha1!==''" ng-src="{$ upload_image_url + barter.image_one_sha1 $}"/>
+            <img class="barter-img-show" ng-if="barter.image_two_sha1!==''" ng-src="{$ upload_image_url + barter.image_two_sha1 $}"/>
+            <img class="barter-img-show" ng-if="barter.image_three_sha1!==''" ng-src="{$ upload_image_url + barter.image_three_sha1 $}"/>
+            <img class="barter-img-show" ng-if="barter.image_four_sha1!==''" ng-src="{$ upload_image_url + barter.image_four_sha1 $}"/>
         </div>
         <strong>{$zh.description$}</strong>
         <p class="detail-description">{$barter.content$}</p>

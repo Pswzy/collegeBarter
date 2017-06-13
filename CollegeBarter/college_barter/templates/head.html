@@ -15,9 +15,6 @@
                 </ul>
             </div>
             <div class="head-right">
-                <!--<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">-->
-                    <!--<img class="img-circle user-head" ng-src="{$upload_image_url + userInfo.headimg$}"/>-->
-                <!--</button>-->
                 <img class="img-circle user-head" ng-src="{$upload_image_url + userInfo.headimg$}" ng-click="toggleLink()"/>
                 <ul class="dropdown-menu show-link" ng-if="head.state">
                     <li ng-click="getUserInfo()" data-toggle="modal" data-target="#myModal"><a>{$ head.user $}</a></li>
