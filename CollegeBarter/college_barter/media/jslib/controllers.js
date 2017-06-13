@@ -176,7 +176,6 @@ angular.module('starter.controllers', [])
     }
 
     $scope.reg = function () {
-        console.log($scope.user.school);
         if ($scope.user.username === '') {
             $scope.user.validation = false;
             $scope.user.errorReg = '请填写用户名';
@@ -1058,7 +1057,6 @@ angular.module('starter.controllers', [])
                         userName : $scope.username,
                         barterSha1 : $scope.barterSha1
                     };
-                    console.log($scope.barter.flowObj);
                     $scope.barter.flowObj.upload();
                     $scope.fileNum = $scope.barter.flowObj.files.length;
                 }
