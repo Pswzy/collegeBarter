@@ -519,7 +519,10 @@ angular.module('starter.controllers', [])
     // $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
     $scope.resize_image_url = "/media/resize_image/resize_";
     $scope.upload_image_url = "/media/upload_image/";
-    $scope.voidContent = "没有发布的物品！"
+    $scope.voidState = {
+        voidContent: "没有发布的物品！",
+        loaded: false
+    }
 
     $scope.barter.loadContent = function () {
         $scope.end = $scope.start + $scope.numOfLoadContent;
@@ -531,6 +534,7 @@ angular.module('starter.controllers', [])
         var postdata = "data=" + data;
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
+            $scope.voidState.loaded = true;
             if (data.ret != '1101') {
                 // alert(data.info);
                 return;
@@ -647,7 +651,10 @@ angular.module('starter.controllers', [])
     // $scope.upload_image_url = "http://collegebarter.cn/media/upload_image/";
     $scope.resize_image_url = "/media/resize_image/resize_";
     $scope.upload_image_url = "/media/upload_image/";
-    $scope.voidContent = "没有收藏的物品！"
+    $scope.voidState = {
+        voidContent: "没有收藏的物品！",
+        loaded: false
+    }
     $scope.barter.loadContent = function () {
         $scope.end = $scope.start + $scope.numOfLoadContent;
         var data = JSON.stringify({
@@ -658,6 +665,7 @@ angular.module('starter.controllers', [])
         var postdata = "data=" + data;
         var responsePromise = apiServices.postRequest(postdata);
         responsePromise.success(function (data, status, headers) {
+            $scope.voidState.loaded = true;
             if (data.ret != '1101') {
                 // alert(data.info);
                 return;
