@@ -14,7 +14,7 @@
                     <div class="saler">{$v.creatorName$}</div>
                 </div>
             </div>
-            <div class="void-content" ng-if="barter.length == 0"><h1>{$voidContent$}</h1></div>
+            <div class="void-content" ng-if="barter.length == 0 && voidState.loaded"><h1>{$voidState.voidContent$}</h1></div>
             <div class="loadmore" ng-if="loadmore.state"><h3><button class="btn btn-lg btn-primary" ng-click="loadmoreBarter()">{$loadmore.zh$}</button></h3></div>
         </div>
     </div>
