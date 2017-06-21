@@ -74,7 +74,7 @@ def android_request(request):
                 #if not len(user) or user[0].school.decode('gkb') != school:
                     rsdic={'info':'User does not exist','ret':1104}
                     return
-            elif len(users)==1 or users[0].is_register==1:
+            elif len(users) !=1 or users[0].is_register==1:
                 rsdic={'info':'is_registered','ret':1102}
                 return
             rsdic={'info':'ok','ret':1101}
