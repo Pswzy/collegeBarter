@@ -223,7 +223,8 @@ angular.module('starter.controllers', [])
                     return;
                 } else {
                     $cookies.put("username", $scope.user.username);
-                    $state.go('app.recent');
+                    $scope.state = "login";
+                    // $state.go('app.recent');
                 }
             })
         }
